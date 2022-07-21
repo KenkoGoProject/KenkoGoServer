@@ -1,18 +1,19 @@
 import asyncio
-import time
+import logging
 import os
 import platform
 import re
 import sys
 import tarfile
+import time
 import zipfile
+
 import requests
 import Utils
-from ServerStatus import ServerStatus
+from GocqMessage import GocqMessage
 from GocqProcess.GocqProcess import GocqProcess
 from HttpServer.HttpServer import HttpServer
-import logging
-from GocqMessage import GocqMessage
+from module.ServerStatus import ServerStatus
 
 Logger: logging.Logger = Utils.get_logger('   Server')
 Logger.setLevel(logging.DEBUG if '--debug' in sys.argv else logging.INFO)
@@ -81,13 +82,13 @@ class Server:
             raise SystemError('Unsupported architecture, 不支持的操作系统')
 
         # 读取配置文件
-        self.config = Utils.YamlConfig('./config.yml')
+        self.config = Utils.YamlConfig('../config.yml')
 
         # 定义一些常量
-        gocq_path_dir = './gocq'
+        gocq_path_dir = '../src/gocq'
         gocq_secret = 'eh182yg909du1uas'
         gocq_access_token = 'jdo1902d18092yhf'
-        gocq_path_config = os.path.join(gocq_path_dir, 'config.yml')
+        gocq_path_config = os.path.join(gocq_path_dir, '../src/config.yml')
         gocq_name_bin = 'go-cqhttp' + (('.exe' if self.is_win else ''))
         gocq_path_bin = os.path.join(gocq_path_dir, gocq_name_bin)
 

@@ -1,13 +1,15 @@
+import logging
 import sys
 import threading
 from typing import Union
-from .DefaultRouter import DefaultRouter
+
 import Utils
-import logging
-from .WebsocketManager import WebsocketManager
 import uvicorn as uvicorn
 from fastapi import FastAPI
+
+from .DefaultRouter import DefaultRouter
 from .GocqApi import GocqApi
+from .WebsocketManager import WebsocketManager
 
 Logger = Utils.get_logger('     HTTP')
 Logger.setLevel(logging.DEBUG if '--debug' in sys.argv else logging.INFO)
@@ -29,7 +31,7 @@ class HttpServer:
         if Utils.is_port_in_use(self.port):
             if not self.server_config['port']['auto_change']:
                 raise SystemError(f'端口 {self.port} 被占用！')
-            _port_http = Utils.get_free_port()
+            _port_http = Utils.get_random_free_port()
             Logger.warning(f'端口 {self.port} 被占用，已尝试修改为{_port_http}！')
             self.server_config['port']['http'] = _port_http
             self.server_config.save()
@@ -57,7 +59,7 @@ class HttpServer:
 
     def start(self):
         self.thread_http = threading.Thread(
-            target=uvicorn.run,
+            target=uvicorn.start,
             daemon=True,
             kwargs={
                 'app': self.app,

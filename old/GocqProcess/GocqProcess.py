@@ -1,13 +1,14 @@
+import logging
 import os
 import re
 import subprocess
 import sys
 import threading
 from typing import Union
-from GocqMessage import GocqMessage
+
 import Utils
+from GocqMessage import GocqMessage
 from ServerStatus import ServerStatus
-import logging
 
 Logger2 = Utils.get_logger('go-cqhttp')
 Logger2.setLevel(logging.DEBUG if '--debug' in sys.argv else logging.INFO)
@@ -204,7 +205,7 @@ class GocqProcess:
                 continue
             __server = _server['http']
             if Utils.is_port_in_use(int(__server['port'])):
-                _gocq_port_api = Utils.get_free_port()
+                _gocq_port_api = Utils.get_random_free_port()
                 Logger2.warning(f'api 端口 {__server["port"]} 被占用，已尝试修改为{_gocq_port_api}！')
                 __server['port'] = _gocq_port_api
 

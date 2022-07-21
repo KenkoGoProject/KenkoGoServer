@@ -1,3 +1,15 @@
+## 0.1.0 `2022-07-21`
+
+`U` 项目更名为 [**KenkoGoServer**](https://github.com/AkagiYui/KenkoGoServer)
+
+`U` 使用了**不优雅**的全局变量
+
+`F` 重构项目
+
+`R` 移除了所有的旧功能
+
+---
+
 ## 0.0.6 `2022-04-18`
 
 `F` 修复了`go-cqhttp`输出`[FATAL]`消息无法解析的问题

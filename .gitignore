@@ -1,7 +1,5 @@
-venv-*
-server/venv-*
-client/venv-*
 .idea
+venv*
 src/gocq
 src/config.yml
 

@@ -1,9 +1,10 @@
 from enum import Enum
 
 
-# 服务器状态码
 class ServerStatus(Enum):
+    """服务器状态码"""
     STOPPED = 0.1  # 未启动
+    HTTP_THREAD_STARTED = 0.2  # HTTP线程已启动
     STARTING = 1.1  # 已启动，等待下一个状态
     CONNECTING_TO_TENCENT = 1.2  # 已启动，正在连接腾讯服务器
     CONNECT_FAILED = 1.25  # 已启动，登录时发生致命错误

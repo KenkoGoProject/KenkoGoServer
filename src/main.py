@@ -1,59 +1,103 @@
-import logging
+import argparse
 import signal
 import sys
-import time
-from typing import Union
-import Utils
-from Server import Server
+
+from rich.traceback import install as install_rich_traceback
+from module.Global import Global
+from module.LoggerEx import LoggerEx, LogLevel
+from module.Console import Console
+from module.UserConfig import UserConfig
+from module.exceptions import AnyException
 
 
-# 信号响应处理器
-def signal_handler(sign, _):
-    if sign in [signal.SIGINT, signal.SIGTERM]:
-        Logger.debug('收到退出信号，正在退出...')
-        global time_to_exit
-        time_to_exit = True
+class Main:
+    # 信号响应处理器
+    def signal_handler(self, sign, _):
+        if sign in (signal.SIGINT, signal.SIGTERM):
+            self.log.debug(f'Received signal {sign}, Application exits.')
+            Global.time_to_exit = True
+
+    # 命令处理器
+    def command_handler(self, _command):
+        if _command == '/exit':
+            Global.time_to_exit = True
+        else:
+            self.log.error('Invalid Command')
+
+    def __init__(self):
+        Global.console = Console()  # 初始化控制台对象
+        install_rich_traceback(console=Global.console, show_locals=True)  # 捕获未处理的异常
+
+        # 命令行参数解析
+        parser = argparse.ArgumentParser(
+            description='KenkoGo - A Controller of go-cqhttp',  # 应用程序的描述
+            add_help=False,  # 不输出自动生成的说明
+            exit_on_error=False,  # 发生错误时不退出
+        )
+        parser.add_argument('-h', '--help', action='store_true', help='Show this help message and exit')
+        parser.add_argument('-d', '--debug', action='store_true', help='Debug mode')
+        parser.add_argument('-c', '--config', help='Config file path', default='config.yml')
+        args_known, args_unknown = parser.parse_known_args()
+
+        if args_known.help:
+            parser.print_help()
+            sys.exit(0)
+
+        debug_mode = args_known.debug  # 开启调试模式
+        Global.debug_mode = debug_mode
+
+        # 创建日志打印器
+        self.log: LoggerEx = LoggerEx('main')
+        self.log.set_level(LogLevel.DEBUG if debug_mode else LogLevel.DEBUG)
+
+        # 加载用户配置
+        self.log.debug('Loading Config...')
+        Global.user_config = UserConfig(args_known.config)
+
+        # 设置信号响应
+        signal.signal(signal.SIGINT, self.signal_handler)
+        signal.signal(signal.SIGTERM, self.signal_handler)
+
+        # 启动程序
+        self.run_forever()
+
+    def run_forever(self):
+        self.log.debug('KenkoGo Starting...')
+        app = None
+
+        try:
+            # 启动应用
+            from KenkoGo import KenkoGo
+            app = KenkoGo()
+            app.start()
+        except AnyException:
+            Global.console.print_exception(show_locals=True)
+            Global.time_to_exit = True
+            self.log.critical('Critical Error, Application exits abnormally.')  # 发生致命错误，应用异常退出
+
+        while not Global.time_to_exit:
+            try:
+                command = Global.console.input('> ')  # 获取用户输入
+            except (UnicodeDecodeError, EOFError, KeyboardInterrupt):
+                if Global.time_to_exit:
+                    break  # 退出
+                else:
+                    self.log.error('Invalid Command')  # 输入的命令无效
+            else:
+                Global.command = command
+                self.command_handler(command)
+
+        # 退出程序
+        from KenkoGo import KenkoGo
+        if isinstance(app, KenkoGo):
+            app.stop()
+        sys.exit(Global.exit_code)
 
 
 if __name__ == '__main__':
+    # 让PyCharm调试输出的信息换行
     if sys.gettrace() is not None:
         print('Debug Mode')
 
-    # 创建日志打印器
-    Logger: logging.Logger = Utils.get_logger('     main')
-    Logger.setLevel(logging.DEBUG if '--debug' in sys.argv else logging.INFO)
-
-    time_to_exit = False
-    shared_objects = {
-        'exit_code': 0,
-    }
-
-    # 设置信号响应
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-
-    server: Union[Server, None] = None
-    try:
-        server: Server = Server({}, shared_objects)
-    except SystemError as e:
-        time_to_exit = True
-        shared_objects['exit_code'] = 1
-        Logger.error(e)
-    except ValueError as e:
-        time_to_exit = True
-        shared_objects['exit_code'] = 2
-        Logger.error(e)
-    else:
-        server.start()
-
-    if time_to_exit:
-        Logger.error('Server 出现异常，正在退出...')
-
-    while not time_to_exit:
-        time.sleep(0)
-
-    if isinstance(server, Server):
-        server.stop()
-
-    Logger.info('程序已退出，欢迎下次使用')
-    sys.exit(shared_objects['exit_code'])
+    # 启动程序
+    sys.exit(Main())

@@ -1,10 +1,10 @@
 import asyncio
 import logging
 import sys
-from fastapi import Request
+
 import requests
-from fastapi import APIRouter
 import Utils
+from fastapi import APIRouter, Request
 from Utils import HttpResult as Result
 
 Logger = Utils.get_logger(' Redirect')

@@ -1,5 +1,10 @@
 # KenkoGoServer
 
+![Python Version](https://img.shields.io/badge/python-3.9.13-blue)
+![License](https://img.shields.io/github/license/AkagiYui/KenkoGoServer)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AkagiYui/KenkoGoServer)
+[![OSCS Status](https://www.oscs1024.com/platform/badge/AkagiYui/KenkoGoServer.git.svg)](https://www.murphysec.com/dr/nz85l1OmneIOz3uzYE)
+
 A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
 [该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现后端服务，~~前端服务请前往 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui)~~
@@ -42,7 +47,7 @@ chmod +x ./kenkogo
 
 ### 使用技术 Technology Stack
 
-Python: [3.9.10](https://www.python.org/) [下载地址](https://www.python.org/ftp/python/3.9.10/python-3.9.10-amd64.exe)
+Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/downloads/release/python-3913/)
 
 打包工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)
 
@@ -50,23 +55,25 @@ Python: [3.9.10](https://www.python.org/) [下载地址](https://www.python.org/
 
 自动构建: [GitHub Actions](https://https://docs.github.com/cn/actions)
 
-#### Python包 Python Package
+### Python包 Python Package
 
-- [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
-- [requests](https://requests.readthedocs.io/en/latest/) HTTP客户端
-- [ruamel.yaml](https://yaml.readthedocs.io/en/latest/) Yaml解析工具
-- [colorlog](https://github.com/borntyping/python-colorlog) 日志染色工具
-- [fastapi](https://fastapi.tiangolo.com/zh/) HTTP/Websocket服务器
-- [uvicorn](https://www.uvicorn.org/) ASGI web 服务器
-- [websockets](https://websockets.readthedocs.io/en/stable/) websocket协议工具
+- [pip-tools 6.8.0](https://github.com/jazzband/pip-tools/) 依赖表生成工具
+- [isort 5.10.1](https://pycqa.github.io/isort/) 导入排序工具
+- [rich 12.5.1](https://github.com/Textualize/rich/blob/master/README.cn.md) 控制台美化工具
+- [ruamel.yaml 0.17.21](https://yaml.readthedocs.io/en/latest/) Yaml解析工具
+- [uvicorn 0.18.2](https://www.uvicorn.org/) ASGI web 服务器
+- [fastapi 0.79.0](https://fastapi.tiangolo.com/zh/) HTTP/Websocket服务器
 
 ### 待办事项 Todo
 
 - [ ] 为 NoneBot2 的驱动提供接口
 - [ ] 集成 [Socket.IO](https://github.com/miguelgrinberg/python-socketio)
 - [ ] 集成 [websocket](https://websockets.readthedocs.io/en/stable/)[-client](https://github.com/websocket-client/websocket-client)
+- [ ] 集成 [websockets](https://websockets.readthedocs.io/en/stable/)
+- [ ] 使用 https://github.com/rholder/retrying
 - [ ] 编写 Nuitka 脚本
-
+- [ ] [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
+- [ ] [requests](https://requests.readthedocs.io/en/latest/) HTTP客户端
 
 ## 从代码开始 Start from Code
 
