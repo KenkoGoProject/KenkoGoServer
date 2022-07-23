@@ -7,7 +7,7 @@ class CqCode:
         return f'[CQ:face,id={face_id}]'
 
     @staticmethod
-    def image(file, image_type: str = 'normal', use_cache: bool = 1, show_id: int = 40000, threads: int = 2):
+    def image(file, image_type: str = 'normal', use_cache: bool = True, show_id: int = 40000, threads: int = 2):
         code = '[CQ:image,file='
         if isinstance(file, str):
             code += f'{file}'
@@ -25,7 +25,7 @@ class CqCode:
 
     @staticmethod
     def image_local(file_path: str, image_type: str = 'normal',
-                    use_cache: bool = 1, show_id: int = 40000, threads: int = 2):
+                    use_cache: bool = True, show_id: int = 40000, threads: int = 2):
         try:
             with open(file_path, 'rb') as f:
                 return CqCode.image(f.read(), image_type, use_cache, show_id, threads)
@@ -38,7 +38,7 @@ class CqCode:
         return f'[CQ:at,qq={user_id}]'
 
     @staticmethod
-    def record(file, use_cache: bool = 1):
+    def record(file, use_cache: bool = True):
         """[CQ:record,file=http://baidu.com/1.mp3]"""
         code = '[CQ:record,file='
         if isinstance(file, str):
@@ -51,7 +51,7 @@ class CqCode:
         return code
 
     @staticmethod
-    def record_local(file_path: str, use_cache: bool = 1):
+    def record_local(file_path: str, use_cache: bool = True):
         try:
             with open(file_path, 'rb') as f:
                 return CqCode.record(f.read(), use_cache)

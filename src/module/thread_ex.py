@@ -25,12 +25,10 @@ class ThreadEx(threading.Thread):
 if __name__ == '__main__':
     import time
 
-
     def run_forever():
         while True:
             print('hello')
             time.sleep(0.1)
-
 
     example_1 = ThreadEx(target=run_forever)
     example_1.start()

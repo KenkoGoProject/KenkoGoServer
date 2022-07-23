@@ -1,7 +1,7 @@
 import time
 
 
-class GocqMessage:
+class GocqEvent:
     @classmethod
     def server_event(cls, event_type: str, event_data=None):
         return {

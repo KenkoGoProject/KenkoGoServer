@@ -1,11 +1,11 @@
+import json
 import logging
 import traceback
 from logging import Formatter
+
 from rich.logging import RichHandler
-import json
 
-
-from module.ServerStatus import ServerStatus
+from module.server_status import ServerStatus
 
 
 class LogLevel(int):
@@ -76,6 +76,5 @@ if __name__ == '__main__':
         log.warning("Hello, World!")
         log.error("Hello, World!")
         # log.trace("Hello, World!")
-
 
     haha()

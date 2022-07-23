@@ -3,11 +3,12 @@ import signal
 import sys
 
 from rich.traceback import install as install_rich_traceback
-from module.Global import Global
-from module.LoggerEx import LoggerEx, LogLevel
-from module.Console import Console
-from module.UserConfig import UserConfig
-from module.exceptions import AnyException
+
+from module.console import Console
+from module.exception_ex import AnyException
+from module.global_dict import Global
+from module.logger_ex import LoggerEx, LogLevel
+from module.user_config import UserConfig
 
 
 class Main:
@@ -15,18 +16,18 @@ class Main:
     def signal_handler(self, sign, _):
         if sign in (signal.SIGINT, signal.SIGTERM):
             self.log.debug(f'Received signal {sign}, Application exits.')
-            Global.time_to_exit = True
+            Global().time_to_exit = True
 
     # 命令处理器
     def command_handler(self, _command):
         if _command == '/exit':
-            Global.time_to_exit = True
+            Global().time_to_exit = True
         else:
             self.log.error('Invalid Command')
 
     def __init__(self):
-        Global.console = Console()  # 初始化控制台对象
-        install_rich_traceback(console=Global.console, show_locals=True)  # 捕获未处理的异常
+        Global().console = Console()  # 初始化控制台对象
+        install_rich_traceback(console=Global().console, show_locals=True)  # 捕获未处理的异常
 
         # 命令行参数解析
         parser = argparse.ArgumentParser(
@@ -44,15 +45,15 @@ class Main:
             sys.exit(0)
 
         debug_mode = args_known.debug  # 开启调试模式
-        Global.debug_mode = debug_mode
+        Global().debug_mode = debug_mode
 
         # 创建日志打印器
         self.log: LoggerEx = LoggerEx('main')
-        self.log.set_level(LogLevel.DEBUG if debug_mode else LogLevel.DEBUG)
+        self.log.set_level(LogLevel.DEBUG if debug_mode else LogLevel.INFO)
 
         # 加载用户配置
         self.log.debug('Loading Config...')
-        Global.user_config = UserConfig(args_known.config)
+        Global().user_config = UserConfig(args_known.config)
 
         # 设置信号响应
         signal.signal(signal.SIGINT, self.signal_handler)
@@ -67,31 +68,31 @@ class Main:
 
         try:
             # 启动应用
-            from KenkoGo import KenkoGo
+            from kenko_go import KenkoGo
             app = KenkoGo()
             app.start()
         except AnyException:
-            Global.console.print_exception(show_locals=True)
-            Global.time_to_exit = True
+            Global().console.print_exception(show_locals=True)
+            Global().time_to_exit = True
             self.log.critical('Critical Error, Application exits abnormally.')  # 发生致命错误，应用异常退出
 
-        while not Global.time_to_exit:
+        while not Global().time_to_exit:
             try:
-                command = Global.console.input('> ')  # 获取用户输入
+                command = Global().console.input('> ')  # 获取用户输入
             except (UnicodeDecodeError, EOFError, KeyboardInterrupt):
-                if Global.time_to_exit:
+                if Global().time_to_exit:
                     break  # 退出
                 else:
                     self.log.error('Invalid Command')  # 输入的命令无效
             else:
-                Global.command = command
+                Global().command = command
                 self.command_handler(command)
 
         # 退出程序
-        from KenkoGo import KenkoGo
+        from kenko_go import KenkoGo
         if isinstance(app, KenkoGo):
             app.stop()
-        sys.exit(Global.exit_code)
+        sys.exit(Global().exit_code)
 
 
 if __name__ == '__main__':

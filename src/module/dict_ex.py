@@ -11,8 +11,8 @@ class DictEx(UserDict):
         super().__init__(*args, **kwargs)
         self.ignore_key_error = ignore_key_error
 
-    def __contains__(self, ori_keys: str):
-        now_dict = super()
+    def __contains__(self, ori_keys: str):    # type: ignore[override]
+        now_dict: UserDict = super()  # type: ignore[assignment]
         for key in ori_keys.split('.'):
             try:
                 now_dict = now_dict.__getitem__(key)
@@ -21,7 +21,7 @@ class DictEx(UserDict):
         return True
 
     def __getitem__(self, ori_keys: str):
-        now_dict = super()
+        now_dict: UserDict = super()  # type: ignore[assignment]
         for key in ori_keys.split('.'):
             try:
                 now_dict = now_dict.__getitem__(key)
@@ -33,13 +33,13 @@ class DictEx(UserDict):
         return now_dict
 
     def __setitem__(self, ori_key: str, ori_value):
-        ori_key = ori_key.split('.')
-        now_dict = super()
-        for key in ori_key[:-1]:
+        keys: list[str] = ori_key.split('.')
+        now_dict: UserDict = super()  # type: ignore[assignment]
+        for key in keys[:-1]:
             if not now_dict.__contains__(key):
                 now_dict.__setitem__(key, {})
             now_dict = now_dict.__getitem__(key)
-        now_dict.__setitem__(ori_key[-1], ori_value)
+        now_dict.__setitem__(keys[-1], ori_value)
 
 
 if __name__ == '__main__':

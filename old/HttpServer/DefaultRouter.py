@@ -17,9 +17,7 @@ Logger = Utils.get_logger('     HTTP')
 
 
 # 计算hmac
-def hash_mac(key: str, content: bytes, alg=hashlib.sha1):
-    hmac_code = hmac.new(key.encode(), content, alg)
-    return hmac_code.hexdigest()
+
 
 
 class DefaultRouter:

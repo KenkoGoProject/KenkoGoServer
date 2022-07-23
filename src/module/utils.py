@@ -1,10 +1,17 @@
+import hashlib
+import hmac
+import random
+import socket
+
+import requests
+
+
 class Utils:
     """自定义工具类"""
 
     @staticmethod
     def is_port_in_use(_port: int, _host='127.0.0.1'):
         """检查端口是否被占用"""
-        import socket
         s = None
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,7 +27,6 @@ class Utils:
     @classmethod
     def get_random_free_port(cls):
         """获取一个随机空闲端口"""
-        import random
         result = random.randint(10000, 65535)
         while cls.is_port_in_use(result):
             result = random.randint(10000, 65535)
@@ -45,7 +51,6 @@ class Utils:
     @staticmethod
     def get_public_ip(method: int = 0):
         """获取公网ip"""
-        import requests
         if method == 0:
             return requests.get('https://api.ipify.org').text
         elif method == 1:
@@ -60,3 +65,9 @@ class Utils:
             return requests.get('http://ipecho.net/plain').text
         elif method == 6:
             return requests.get('http://hfsservice.rejetto.com/ip.php').text
+
+    @staticmethod
+    def hash_mac(key: str, content: bytes, alg=hashlib.sha1):
+        """hash mac"""
+        hmac_code = hmac.new(key.encode(), content, alg)
+        return hmac_code.hexdigest()

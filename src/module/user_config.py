@@ -1,6 +1,6 @@
-from module.Global import Global
-from module.LoggerEx import LoggerEx, LogLevel
-from module.YamlConfig import YamlConfig
+from module.global_dict import Global
+from module.logger_ex import LoggerEx, LogLevel
+from module.yaml_config import YamlConfig
 
 
 class UserConfig:
@@ -12,7 +12,7 @@ class UserConfig:
     def __init__(self, file_path):
         self.log = LoggerEx('UserConfig')
         self.file_path = file_path
-        if Global.debug_mode:
+        if Global().debug_mode:
             self.log.set_level(LogLevel.DEBUG)
         self.load()
 
@@ -27,4 +27,3 @@ class UserConfig:
         self.log.debug(f'Saving config file: {self.file_path}')
         self.data.save()
         self.log.debug(f'Config saved: {dict(self.data)}')
-

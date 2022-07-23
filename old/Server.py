@@ -10,10 +10,11 @@ import zipfile
 
 import requests
 import Utils
-from GocqMessage import GocqMessage
 from GocqProcess.GocqProcess import GocqProcess
 from HttpServer.HttpServer import HttpServer
-from module.ServerStatus import ServerStatus
+
+from module.gocq_event import GocqMessage
+from module.server_status import ServerStatus
 
 Logger: logging.Logger = Utils.get_logger('   Server')
 Logger.setLevel(logging.DEBUG if '--debug' in sys.argv else logging.INFO)
@@ -85,7 +86,7 @@ class Server:
         self.config = Utils.YamlConfig('../config.yml')
 
         # 定义一些常量
-        gocq_path_dir = '../src/gocq'
+        gocq_path_dir = 'gocq'
         gocq_secret = 'eh182yg909du1uas'
         gocq_access_token = 'jdo1902d18092yhf'
         gocq_path_config = os.path.join(gocq_path_dir, '../src/config.yml')

@@ -18,4 +18,3 @@ class ServerStatus(Enum):
     RUNNING = 3.1  # 已启动，运行中
     OFFLINE = 3.2  # 已启动，离线状态
     STOPPING = 4.1  # 已启动，正在停止
-

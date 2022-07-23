@@ -7,7 +7,7 @@ from module.atomicwrites import atomic_write
 class Internationalization:
     def __init__(self, lang_path: str, default_lang: str, auto_load: bool = True):
         self.lang_path = lang_path
-        self.lang_dict = {}
+        self.lang_dict: dict[str, str] = {}
         self.default_lang = default_lang
         if auto_load:
             self.set_lang(default_lang)

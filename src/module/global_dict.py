@@ -1,9 +1,12 @@
-from module.Console import Console
+from typing import Any
+
+from module.console import Console
+from module.singleton_type import SingletonType
 
 
-class Global:
+class Global(metaclass=SingletonType):
     """单例模式，全局变量"""
-    _members = {}
+    _members: dict[str, Any] = {}
     __dict__ = _members
 
     exit_code = 0  # 退出码
@@ -56,12 +59,19 @@ class Global:
     def clear(self):
         self._members.clear()
 
+        # self.exit_code = 0  # 退出码
+        # self.time_to_exit = False  # 是时候退出了
+        # self.debug_mode = False  # 调试模式
+        # self.user_config = None  # 用户配置
+        # self.console = None  # 控制台对象
+        # self.command: str = ''  # 命令
+        # self.args_known = ()  # 命令行参数
+        # self.args_unknown = ()  # 未知命令
 
-Global = Global()
 
 if __name__ == '__main__':
-    Global.a = 1
-    Global['b'] = 2
-
-    for k, v in Global.items():
+    for k, v in Global().items():
         print(k, v)
+
+    Global().debug_mode = True
+    print(Global().debug_mode)

@@ -7,6 +7,8 @@ default_middleware = {
         'bucket': 1,
     },
 }
+
+
 default_gocq_config = {
     'account': {
         'uin': 0,

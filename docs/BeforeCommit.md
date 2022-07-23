@@ -2,21 +2,23 @@
 
 ## 编写 更新日志
 
-`U` Updated 增强了某个功能
-
-`F` Fixed 修复了某个功能
-
-`A` Added 增加了某个功能
-
-`D` Deprecated 弃用了某个功能
-
-`R` Removed 删除了某个功能
-
 ## 版本号 信息修改
+
+(src/kenko_go)
 
 VERSION 加一
 
 VERSION_STRING 修改
+
+## 导入排序
+
+```shell
+isort .
+```
+
+## 代码规范
+
+
 
 ## 更新 依赖表
 
@@ -27,8 +29,4 @@ VERSION_STRING 修改
 pip-compile  --annotation-style=line
 ```
 
-## 导入排序
 
-```shell
-isort .
-```

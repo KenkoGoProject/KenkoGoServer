@@ -7,7 +7,10 @@
 
 A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
-[该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现后端服务，~~前端服务请前往 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui)~~
+[KenkoGoServer](https://github.com/AkagiYui/KenkoGoServer)不同于以前的[KenkoGo](https://github.com/AkagiYui/KenkoGo)，
+该项目是一个RestfulAPI的程序，请通过HTTP请求来控制，当该项目进入稳定状态后，`KenkoGo`将被删除。
+
+[该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现后端服务，前端服务请前往 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui)
 
 
 ## 功能介绍 Introduction
@@ -19,6 +22,8 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
 ## 快速开始 Quick Start
 
+1. 在 [release](https://github.com/AkagiYui/KenkoGoServer/release) 下载最新版本
+
 ```shell
 chmod +x ./kenkogo
 ./kenkogo --debug
@@ -28,7 +33,7 @@ chmod +x ./kenkogo
 > 
 > --debug: 开启调试模式，将输出更多信息
 
-当控制台提示`启动完毕`时，可输入`/help`查看可用的指令。
+当控制台提示`KenkoGo Started`时，可输入`/help`查看可用的指令。
 
 
 ## 更新日志 [Changelog](Changelog.md)
@@ -55,14 +60,19 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 
 自动构建: [GitHub Actions](https://https://docs.github.com/cn/actions)
 
-### Python包 Python Package
+依赖表生成工具: [pip-tools 6.8.0](https://github.com/jazzband/pip-tools/)
 
-- [pip-tools 6.8.0](https://github.com/jazzband/pip-tools/) 依赖表生成工具
-- [isort 5.10.1](https://pycqa.github.io/isort/) 导入排序工具
+导入排序工具: [isort 5.10.1](https://pycqa.github.io/isort/)
+
+代码格式化工具: [flake8 4.0.1](https://flake8.readthedocs.io/en/latest/) [mypy 0.971](https://mypy.readthedocs.io/en/latest/)
+
+### 运行时Python包  Runtime Python Package
+
 - [rich 12.5.1](https://github.com/Textualize/rich/blob/master/README.cn.md) 控制台美化工具
 - [ruamel.yaml 0.17.21](https://yaml.readthedocs.io/en/latest/) Yaml解析工具
 - [uvicorn 0.18.2](https://www.uvicorn.org/) ASGI web 服务器
 - [fastapi 0.79.0](https://fastapi.tiangolo.com/zh/) HTTP/Websocket服务器
+- [requests 2.28.1](https://requests.readthedocs.io/en/latest/) HTTP客户端
 
 ### 待办事项 Todo
 
@@ -73,7 +83,7 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 - [ ] 使用 https://github.com/rholder/retrying
 - [ ] 编写 Nuitka 脚本
 - [ ] [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
-- [ ] [requests](https://requests.readthedocs.io/en/latest/) HTTP客户端
+- [ ] https://github.com/Zombie123456/pydis
 
 ## 从代码开始 Start from Code
 

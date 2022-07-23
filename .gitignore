@@ -1,6 +1,6 @@
 .idea
 venv*
-src/gocq
+old/gocq
 src/config.yml
 
 ### Python template

@@ -1,5 +1,5 @@
 from collections import UserString
-from typing import Any, Generator, Iterable, Union
+from typing import Generator, Iterable, Union
 
 
 class StrEx(UserString):
@@ -9,6 +9,7 @@ class StrEx(UserString):
     重写find()、startswith()支持查找子串列表、元组或集合
     新增replace_all()方法支持替换所有匹配的子串
     """
+
     def __contains__(self, item) -> bool:
         if isinstance(item, str):
             return super().__contains__(item)
@@ -16,7 +17,7 @@ class StrEx(UserString):
             return any((True for i in item if i in self))
         raise TypeError(f"'in' operator not supported for type '{type(item)}'")
 
-    def find(self, __sub: Iterable, __start=None, __end=None) -> Union[int, Generator[int, Any, None]]:
+    def find(self, __sub: Iterable, __start=None, __end=None) -> Union[int, Generator]:  # type: ignore[override]
         if isinstance(__sub, str):
             return super().find(__sub, __start, __end)
         elif isinstance(__sub, Iterable):
@@ -48,8 +49,8 @@ if __name__ == '__main__':
     assert word_what_self not in example_2
     assert example_1.find('什') == 2
     assert example_2.find('什') == 1
-    assert list(example_1.find(word_what_self)) == [-1, -1, 0, -1]
-    assert list(example_2.find(word_what_self)) == [-1, -1, -1, -1]
+    assert list(example_1.find(word_what_self)) == [-1, -1, 0, -1]  # type: ignore[arg-type]
+    assert list(example_2.find(word_what_self)) == [-1, -1, -1, -1]  # type: ignore[arg-type]
     assert example_1.startswith('咱')
     assert not example_2.startswith('咱')
     assert example_1.startswith(word_what_self)
