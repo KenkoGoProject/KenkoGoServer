@@ -16,7 +16,6 @@ jobs:
         with:
           python-version: 3.9
       - name: Install Requirements
-        run: |
-        pip install -r requirements-dev.txt
-      - name: lint check
+        run: pip install -r requirements-dev.txt
+      - name: Lint Check
         run: python ./code_lint.py
