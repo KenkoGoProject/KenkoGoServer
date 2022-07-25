@@ -18,7 +18,7 @@ class YamlConfig(UserDict):
     def load(self):
         try:
             with open(self.path, 'r', encoding='utf-8') as f:
-                self.data = self.yaml_controller.load(f)
+                self.data.update(self.yaml_controller.load(f))
         except FileNotFoundError:
             if self.auto_create:
                 self.save()
@@ -26,14 +26,14 @@ class YamlConfig(UserDict):
                 raise
 
     def save(self):
-        with atomic_write(self.path, 'w', encoding='utf-8') as f:
+        with atomic_write(self.path, overwrite=True, encoding='utf-8') as f:
             self.yaml_controller.dump(self.data, f)
 
-    def __getitem__(self, key):
-        try:
-            return super(YamlConfig, self).__getitem__(key)
-        except KeyError:
-            return None
+    # def __getitem__(self, key):
+    #     try:
+    #         return super(YamlConfig, self).__getitem__(key)
+    #     except KeyError:
+    #         return None
 
     def __setitem__(self, key, value):
         super().__setitem__(key, value)

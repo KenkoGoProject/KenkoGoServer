@@ -13,8 +13,8 @@ import Utils
 from GocqProcess.GocqProcess import GocqProcess
 from HttpServer.HttpServer import HttpServer
 
-from module.gocq_event import GocqMessage
-from module.server_status import ServerStatus
+from assets.gocq_event import GocqMessage
+from assets.server_status import ServerStatus
 
 Logger: logging.Logger = Utils.get_logger('   Server')
 Logger.setLevel(logging.DEBUG if '--debug' in sys.argv else logging.INFO)
@@ -89,7 +89,7 @@ class Server:
         gocq_path_dir = 'gocq'
         gocq_secret = 'eh182yg909du1uas'
         gocq_access_token = 'jdo1902d18092yhf'
-        gocq_path_config = os.path.join(gocq_path_dir, '../src/config.yml')
+        gocq_path_config = os.path.join(gocq_path_dir, '../src/config1.yaml')
         gocq_name_bin = 'go-cqhttp' + (('.exe' if self.is_win else ''))
         gocq_path_bin = os.path.join(gocq_path_dir, gocq_name_bin)
 

@@ -2,5 +2,13 @@ class AnyException(Exception):
     pass
 
 
-class PortInUseException(Exception):
+class PortInUseError(Exception):
+    pass
+
+
+class UnknownSystemError(Exception):
+    pass
+
+
+class ReleaseNotFoundError(Exception):
     pass

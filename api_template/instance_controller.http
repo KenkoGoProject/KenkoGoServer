@@ -1,0 +1,11 @@
+### Init gocq config
+POST http://{{host}}:{{port}}/instance/check
+
+### Start gocq
+POST http://{{host}}:{{port}}/instance/start
+
+### Stop gocq
+POST http://{{host}}:{{port}}/instance/stop
+
+### Get QR Code
+GET http://{{host}}:{{port}}/instance/qrcode

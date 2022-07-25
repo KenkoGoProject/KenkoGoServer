@@ -130,7 +130,7 @@ class GocqProcess:
                 text_output = text_output.removeprefix('Bot已离线: ')
                 Logger.warning(f'Bot已离线: {text_output}')
             elif text_output.startswith('扫码登录无法恢复会话'):
-                Logger.error('快速重连失败，扫码登录无法恢复会话，go-cqhttp将重启')
+                Logger.not_found('快速重连失败，扫码登录无法恢复会话，go-cqhttp将重启')
                 self.restart()
             elif text_output.startswith('登录时发生致命错误: '):
                 text_output = text_output.removeprefix('登录时发生致命错误: ')
@@ -141,7 +141,7 @@ class GocqProcess:
                     self.status_operator(ServerStatus.CONNECT_FAILED)
                     self.restart()
                 else:
-                    Logger.error(text_output)
+                    Logger.not_found(text_output)
                     self.status_operator(ServerStatus.CONNECT_FAILED)
                     self.restart()
             elif text_output.startswith('请使用手机QQ扫描二维码 (qrcode.png)'):

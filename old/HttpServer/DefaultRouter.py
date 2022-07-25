@@ -95,7 +95,7 @@ class DefaultRouter:
             start_time = time.time()  # 收到http请求
 
             if not self.shared_objects['accept_connection']:
-                response = JSONResponse(Result.error(405, 'server not running'))
+                response = JSONResponse(Result.not_found(405, 'server not running'))
             elif request.url.path in ['/gocq', '/qrcode']:
                 response = await call_next(request)
             else:
@@ -118,7 +118,7 @@ class DefaultRouter:
         async def event_startup():
             self.shared_objects['accept_connection'] = True
             Logger.info(f'服务器已在 http://{self.server_config["host"]}:{self.server_config["port"]["http"]} 启动')
-            Logger.debug(f'调试地址: http://{Utils.get_self_ip()}:{self.server_config["port"]["http"]}')
+            Logger.debug(f'调试地址: http://{get_self_ip()}:{self.server_config["port"]["http"]}')
             if '--auto-start' in sys.argv:
                 # time.sleep(1)
                 # threading.Thread(target=await api_start).start()

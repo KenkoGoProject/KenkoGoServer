@@ -1,11 +1,9 @@
-import json
+
 import logging
 import traceback
 from logging import Formatter
 
 from rich.logging import RichHandler
-
-from module.server_status import ServerStatus
 
 
 class LogLevel(int):
@@ -19,19 +17,16 @@ class LogLevel(int):
     NOTSET = logging.NOTSET  # 0
 
 
-class CustomJsonEncoder(json.JSONEncoder):
-    def default(self, _object):
-        if isinstance(_object, ServerStatus):
-            return {
-                'code': _object.value,
-                'name': _object.name
-            }
-        return json.JSONEncoder.default(self, _object)
+# 修改 root logger 的基础配置
+# rich_handler = RichHandler(show_time=False, show_path=False, rich_tracebacks=True, tracebacks_show_locals=True)
+# fmt_string = '%(asctime)s.%(msecs)03d %(message)s'
+# rich_handler.setFormatter(Formatter(fmt=fmt_string, datefmt='%Y-%m-%d %H:%M:%S'))
+# logging.basicConfig(handlers=[rich_handler])
 
 
 class LoggerEx:
     def __init__(self, name: str = None, log_level: int = LogLevel.INFO, show_name: bool = True):
-        self.name = traceback.extract_stack()[-2].name if name is None else name
+        self.name = name or traceback.extract_stack()[-2].name
         self.show_name = show_name
         self.logger = logging.getLogger(self.name)
 

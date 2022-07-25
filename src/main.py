@@ -20,7 +20,11 @@ class Main:
 
     # 命令处理器
     def command_handler(self, _command):
-        if _command == '/exit':
+        if _command == '/help':
+            help_text = """/help: Show this help message
+/exit: Exit Application"""
+            Global().console.print(help_text)
+        elif _command == '/exit':
             Global().time_to_exit = True
         else:
             self.log.error('Invalid Command')
@@ -31,13 +35,13 @@ class Main:
 
         # 命令行参数解析
         parser = argparse.ArgumentParser(
-            description='KenkoGo - A Controller of go-cqhttp',  # 应用程序的描述
+            description=f'{Global().app_name} - A Controller of go-cqhttp',  # 应用程序的描述
             add_help=False,  # 不输出自动生成的说明
             exit_on_error=False,  # 发生错误时不退出
         )
         parser.add_argument('-h', '--help', action='store_true', help='Show this help message and exit')
         parser.add_argument('-d', '--debug', action='store_true', help='Debug mode')
-        parser.add_argument('-c', '--config', help='Config file path', default='config.yml')
+        parser.add_argument('-c', '--config', help='Config file path', default='config.yaml')
         args_known, args_unknown = parser.parse_known_args()
 
         if args_known.help:
@@ -48,7 +52,7 @@ class Main:
         Global().debug_mode = debug_mode
 
         # 创建日志打印器
-        self.log: LoggerEx = LoggerEx('main')
+        self.log: LoggerEx = LoggerEx(self.__class__.__name__)
         self.log.set_level(LogLevel.DEBUG if debug_mode else LogLevel.INFO)
 
         # 加载用户配置
@@ -63,7 +67,7 @@ class Main:
         self.run_forever()
 
     def run_forever(self):
-        self.log.debug('KenkoGo Starting...')
+        self.log.debug(f'{Global().app_name} Starting...')
         app = None
 
         try:
@@ -92,6 +96,7 @@ class Main:
         from kenko_go import KenkoGo
         if isinstance(app, KenkoGo):
             app.stop()
+        self.log.debug(f'{Global().app_name} Exits.')
         sys.exit(Global().exit_code)
 
 

@@ -2,8 +2,8 @@ import time
 
 
 class GocqEvent:
-    @classmethod
-    def server_event(cls, event_type: str, event_data=None):
+    @staticmethod
+    def server_event(event_type: str, event_data=None):
         return {
             'time': int(time.time()),
             'post_type': 'server_event',

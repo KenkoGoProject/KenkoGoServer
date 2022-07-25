@@ -47,14 +47,19 @@ chmod +x ./kenkogo
 
 建议仅使用该项目完成进程管理，其他功能实现可使用 [NoneBot2](https://v2.nonebot.dev/)
 
+该项目未计划支持 Windows 10 以下版本的系统，并且非 amd64 架构的系统暂未经过测试。
 
 ## 开发相关 Development
+
+操作系统：[Windows 10 19044.1586](https://www.microsoft.com/zh-cn/windows)
+
+系统架构：amd64
 
 ### 使用技术 Technology Stack
 
 Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/downloads/release/python-3913/)
 
-打包工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)
+构建工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)
 
 数据库: [SQLite](https://www.sqlite.org/index.html)
 
@@ -87,6 +92,8 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 
 ## 从代码开始 Start from Code
 
+### 运行 Start
+
 请确保你的机器有 **Python 3.9.10** 的环境，其他版本未经测试。
 
 1. 部署运行环境
@@ -103,11 +110,25 @@ python -m pip install -r ./requirements.txt
 
 ```shell
 cd ./src
-cp config.yml.bak config.yml
+cp config.yaml.bak config.yaml
 ```
 
 3. 启动脚本
 
 ```shell
 python ./main.py --debug
+```
+
+### 代码检查 Code Lint
+
+```shell
+python -m pip install -r ./requirements-dev.txt
+python ./code_lint.py
+```
+
+### 构建 Build
+
+```shell
+python -m pip install -r ./requirements-build.txt
+python ./build.py
 ```

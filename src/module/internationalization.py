@@ -31,7 +31,7 @@ class Internationalization:
             return key
 
     def save(self):
-        with atomic_write(os.path.join(self.lang_path, f'{self.default_lang}.json'), 'w', encoding='utf-8') as f:
+        with atomic_write(os.path.join(self.lang_path, f'{self.default_lang}.json'), overwrite=True, encoding='utf-8') as f:
             json.dump(self.lang_dict, f, indent=4, ensure_ascii=False)
 
     def __del__(self):

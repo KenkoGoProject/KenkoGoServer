@@ -48,5 +48,5 @@ class GocqApi:
             elif method == 'GET':
                 response = self.r.get(f'{self.base_url}/{api_name}', data=body)
             else:
-                return Result.error(f'{method} is not supported')
+                return Result.not_found(f'{method} is not supported')
             return Result.success(response.json())

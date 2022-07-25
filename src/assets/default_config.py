@@ -51,20 +51,19 @@ default_gocq_config = {
     'servers': [
         {
             'http': {
-                'host': '127.0.0.1',
-                'port': 35700,
+                'address': '127.0.0.1:35700',
                 'timeout': 5,
                 'long-polling': {
                     'enabled': False,
                     'max-queue-size': 2000,
                 },
                 'middlewares': default_middleware,
-                'post': [
-                    {
-                        'url': 'http://127.0.0.1:15700/gocq',
-                        'secret': '',
-                    }
-                ],
+                # 'post': [
+                #     {
+                #         'url': 'http://127.0.0.1:18082/gocq',
+                #         'secret': '',
+                #     }
+                # ],
             }
         },
         # {
@@ -74,12 +73,12 @@ default_gocq_config = {
         #         'middlewares': default_middleware,
         #     }
         # },
-        # {
-        #     'ws-reverse': {
-        #         'universal': 'ws://127.0.0.1:36700',
-        #         'reconnect-interval': 3000,
-        #         'middlewares': default_middleware,
-        #     }
-        # }
+        {
+            'ws-reverse': {
+                'universal': 'ws://127.0.0.1:18082/instance',
+                'reconnect-interval': 3000,
+                'middlewares': default_middleware,
+            }
+        },
     ],
 }

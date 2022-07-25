@@ -1,0 +1,8 @@
+### Get remote versions
+GET http://{{host}}:{{port}}/gocqbin/remoteversion
+
+### Download newest remote versions
+POST http://{{host}}:{{port}}/gocqbin/download
+
+### Download specific remote version
+POST http://{{host}}:{{port}}/gocqbin/download?version=v0.9.36-fix2
