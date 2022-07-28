@@ -3,6 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-3.9.13-blue)
 ![License](https://img.shields.io/github/license/AkagiYui/KenkoGoServer)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AkagiYui/KenkoGoServer)
+![lines](https://img.shields.io/tokei/lines/github/AkagiYui/KenkoGoServer)
 [![OSCS Status](https://www.oscs1024.com/platform/badge/AkagiYui/KenkoGoServer.git.svg)](https://www.murphysec.com/dr/nz85l1OmneIOz3uzYE)
 
 A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
@@ -10,7 +11,9 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 [KenkoGoServer](https://github.com/AkagiYui/KenkoGoServer)不同于以前的[KenkoGo](https://github.com/AkagiYui/KenkoGo)，
 该项目是一个RestfulAPI的程序，请通过HTTP请求来控制，当该项目进入稳定状态后，`KenkoGo`将被删除。
 
-[该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现后端服务，前端服务请前往 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui)
+[该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现后端服务，
+前端服务请前往 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui)，
+或使用 [KenkoGoClient](https://github.com/AkagiYui/KenkoGoClient)
 
 
 ## 功能介绍 Introduction
@@ -22,7 +25,7 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
 ## 快速开始 Quick Start
 
-1. 在 [release](https://github.com/AkagiYui/KenkoGoServer/release) 下载最新版本
+1. 在 [release](https://github.com/AkagiYui/KenkoGoServer/releases) 下载最新版本
 
 ```shell
 chmod +x ./kenkogo
@@ -78,23 +81,22 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 - [uvicorn 0.18.2](https://www.uvicorn.org/) ASGI web 服务器
 - [fastapi 0.79.0](https://fastapi.tiangolo.com/zh/) HTTP/Websocket服务器
 - [requests 2.28.1](https://requests.readthedocs.io/en/latest/) HTTP客户端
+- [websockets 10.3](https://websockets.readthedocs.io/en/stable/) Websocket 协议框架
 
 ### 待办事项 Todo
 
-- [ ] 为 NoneBot2 的驱动提供接口
 - [ ] 集成 [Socket.IO](https://github.com/miguelgrinberg/python-socketio)
-- [ ] 集成 [websocket](https://websockets.readthedocs.io/en/stable/)[-client](https://github.com/websocket-client/websocket-client)
-- [ ] 集成 [websockets](https://websockets.readthedocs.io/en/stable/)
-- [ ] 使用 https://github.com/rholder/retrying
+- [ ] 集成 [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
+- [ ] 集成 [pydis](https://github.com/Zombie123456/pydis)
+- [ ] 集成 [retrying](https://github.com/rholder/retrying)
 - [ ] 编写 Nuitka 脚本
-- [ ] [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
-- [ ] https://github.com/Zombie123456/pydis
+- [ ] 为 NoneBot2 的驱动提供接口
 
 ## 从代码开始 Start from Code
 
 ### 运行 Start
 
-请确保你的机器有 **Python 3.9.10** 的环境，其他版本未经测试。
+请确保你的机器有 **Python 3.9.13** 的环境，其他版本未经测试。
 
 1. 部署运行环境
 

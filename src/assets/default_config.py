@@ -1,4 +1,4 @@
-default_middleware = {
+DEFAULT_MIDDLEWARE = {
     'access-token': '1231',
     'filter': '',
     'rate-limit': {
@@ -9,7 +9,7 @@ default_middleware = {
 }
 
 
-default_gocq_config = {
+DEFAULT_GOCQ_CONFIG = {
     'account': {
         'uin': 0,
         'password': '',
@@ -42,7 +42,7 @@ default_gocq_config = {
         'log-force-new': False,
         'debug': False,
     },
-    'default-middlewares': default_middleware,
+    'default-middlewares': DEFAULT_MIDDLEWARE,
     'database': {
         'leveldb': {
             'enable': True,
@@ -57,7 +57,7 @@ default_gocq_config = {
                     'enabled': False,
                     'max-queue-size': 2000,
                 },
-                'middlewares': default_middleware,
+                'middlewares': DEFAULT_MIDDLEWARE,
                 # 'post': [
                 #     {
                 #         'url': 'http://127.0.0.1:18082/gocq',
@@ -77,7 +77,7 @@ default_gocq_config = {
             'ws-reverse': {
                 'universal': 'ws://127.0.0.1:18082/instance',
                 'reconnect-interval': 3000,
-                'middlewares': default_middleware,
+                'middlewares': DEFAULT_MIDDLEWARE,
             }
         },
     ],

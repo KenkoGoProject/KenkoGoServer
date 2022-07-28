@@ -8,7 +8,7 @@ from module.logger_ex import LoggerEx, LogLevel
 
 
 class GocqBinController(APIRouter):
-
+    # TODO: 此处应使用单例模式
     def __init__(self, *args, **kwargs):
         super().__init__(prefix='/gocqbin', *args, **kwargs)
         self.log = LoggerEx(self.__class__.__name__)

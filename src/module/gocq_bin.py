@@ -9,25 +9,27 @@ from assets.release import Asset, Release
 from module.exception_ex import ReleaseNotFoundError
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
+from module.singleton_type import SingletonType
 from module.utils import (dict_to_object, download_file, get_os_type,
                           os_type_to_asset_finder)
 
 
-class GocqBin:
-    remote_versions: list[Release] = []
+class GocqBin(metaclass=SingletonType):
+    """go-cqhttp 二进制文件处理"""
 
     def __init__(self):
         self.log = LoggerEx(self.__class__.__name__)
         if Global().debug_mode:
             self.log.set_level(LogLevel.DEBUG)
+        self.remote_versions: list[Release] = []
 
     def get_remote_release(self, use_cache: bool = True) -> list[Release]:
-        """
-        获取远端发行版列表
+        """获取远端发行版列表
 
         :param use_cache: 是否使用缓存
         :return: 远端发行版列表
         """
+        # TODO: review
         if use_cache and self.remote_versions:
             self.log.debug('Get remote version from cache.')
             return self.remote_versions
@@ -36,14 +38,19 @@ class GocqBin:
         release_content: list[dict] = requests.get(release_url).json()
         result: list[Release] = []
         for item in release_content:
-            obj = dict_to_object(item, Release)
+            obj: Release = dict_to_object(item, Release)
             result.append(obj)
-            assets = obj.assets.copy()
+            assets: dict = obj.assets.copy()
             obj.assets = [dict_to_object(asset, Asset) for asset in assets]
         self.remote_versions = result
         return result
 
-    def download_remote_version(self, tag_name: str = None):
+    def download_remote_version(self, tag_name: str = None) -> None:
+        """下载远端发行版
+
+        :param tag_name: 标签名
+        """
+        # TODO: review
         self.get_remote_release()
         if not tag_name:
             tag_name = self.remote_versions[0].tag_name
@@ -63,7 +70,12 @@ class GocqBin:
                         return
         raise ReleaseNotFoundError(f'Release {tag_name} not found.')
 
-    def decompress_gocq(self, file_path: str):
+    def decompress_gocq(self, file_path: str) -> None:
+        """解压gocq.compression文件
+
+        :param file_path: gocq.compression文件路径
+        """
+        # TODO: review
         self.log.debug('Decompressing gocq.compression...')
         Global().gocq_asset_dir.mkdir(parents=True, exist_ok=True)
         os_type = get_os_type()
@@ -77,3 +89,5 @@ class GocqBin:
                 if Global().gocq_bin_name not in tar_ref.getnames():
                     raise FileNotFoundError(f'{Global().gocq_bin_name} not found.')
                 tar_ref.extract(Global().gocq_bin_name, Global().gocq_asset_dir)
+
+    # TODO: 删除等操作

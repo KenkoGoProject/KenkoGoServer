@@ -1,3 +1,5 @@
+"""构建生成二进制版本
+该版本仅在 Windows 上适用"""
 import os.path
 import subprocess
 import time
@@ -55,6 +57,7 @@ def build_exe():
 
 
 def make_build_env():
+    """安装运行时环境"""
     return subprocess.call(args=[
         './venv/Scripts/python.exe', '-m', 'pip', 'install', '-r', 'requirements.txt'
     ], cwd=os.path.curdir)
@@ -65,4 +68,4 @@ if __name__ == '__main__':
     make_build_env()
     build_exe()
     os.rename(f'{build_dir}/main.dist/main.exe', f'{build_dir}/main.dist/KenkoGo.exe')
-    print(f'耗时：{(time.time() - start_time):.2f}s')
+    print(f'Time consumption: {(time.time() - start_time):.2f}s')

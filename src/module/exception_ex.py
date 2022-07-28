@@ -1,7 +1,3 @@
-class AnyException(Exception):
-    pass
-
-
 class PortInUseError(Exception):
     pass
 

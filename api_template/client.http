@@ -1,0 +1,12 @@
+### get status
+POST http://{{host}}:{{port}}/client/api/get_status
+
+### send msg
+POST http://{{host}}:{{port}}/client/api/send_msg
+Content-Type: application/json
+
+{
+  "user_id": 1050314133,
+  "message": "message2",
+  "auto_escape": false
+}

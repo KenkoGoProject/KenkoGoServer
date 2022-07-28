@@ -1,14 +1,12 @@
 import hashlib
-import hmac
 import platform
 import random
 import re
 import socket
-import tarfile
-import zipfile
+import string
 from pathlib import Path, PurePath
 from re import Pattern
-from typing import AnyStr
+from typing import AnyStr, Type, TypeVar
 
 import requests
 from rich.progress import track
@@ -18,8 +16,13 @@ from module.atomicwrites import atomic_write
 from module.exception_ex import UnknownSystemError
 
 
-def is_port_in_use(_port: int, _host='127.0.0.1'):
-    """检查端口是否被占用"""
+def is_port_in_use(_port: int, _host: str = '127.0.0.1') -> bool:
+    """检查端口是否被占用
+
+    :param _port: 端口号
+    :param _host: 主机名
+    :return: True/False
+    """
     s = None
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,17 +36,10 @@ def is_port_in_use(_port: int, _host='127.0.0.1'):
             s.close()
 
 
-def get_random_free_port():
-    """获取一个随机空闲端口"""
-    result = random.randint(10000, 65535)
-    while is_port_in_use(result):
-        result = random.randint(10000, 65535)
-    return result
-
-
-def get_self_ip():
+def get_self_ip() -> str:
     """获取自身ip
-    https://www.zhihu.com/question/49036683/answer/1243217025
+
+    https://www.zhihu.com/question/49036683/answer/124321702
     """
     s = None
     try:
@@ -56,46 +52,36 @@ def get_self_ip():
             s.close()
 
 
-def get_public_ip(method: int = 0):
-    """获取公网ip"""
-    if method == 0:
-        return requests.get('https://api.ipify.org').text
-    elif method == 1:
-        return requests.get('https://api.ip.sb/ip').text
-    elif method == 2:
-        return requests.get('http://myexternalip.com/raw').text
-    elif method == 3:
-        return requests.get('http://ip.42.pl/raw').text
-    elif method == 4:
-        return requests.get('http://myip.ipip.net/').text  # 非纯ip
-    elif method == 5:
-        return requests.get('http://ipecho.net/plain').text
-    elif method == 6:
-        return requests.get('http://hfsservice.rejetto.com/ip.php').text
+def copy_property(dict_: dict, obj: object) -> None:
+    """复制属性，将dict中出现并且对象属性中存在同名的进行拷贝
 
-
-def hash_mac(key: str, content: bytes, alg=hashlib.sha1):
-    """hash mac"""
-    hmac_code = hmac.new(key.encode(), content, alg)
-    return hmac_code.hexdigest()
-
-
-def copy_property(dict_: dict, obj: object):
-    """copy property"""
+    :param dict_: 来源字典
+    :param obj: 目标对象
+    :return: None
+    """
     # TODO: 这里只能转换一层...
     for key, value in dict_.items():
         if hasattr(obj, key):
             setattr(obj, key, value)
 
 
-def dict_to_object(dict_: dict, class_: type):
-    """dict to class"""
+T = TypeVar('T')
+
+
+def dict_to_object(dict_: dict, class_: T) -> Type[T]:
+    """将字典转换为类实例
+
+    :param dict_: 字典
+    :param class_: 类
+    :return: 对象
+    """
     obj = class_()
     copy_property(dict_, obj)
     return obj
 
 
 def get_os_type() -> OSType:
+    """获取系统类型"""
     system = platform.system().strip().lower()
     arch = platform.machine().strip().lower()
     if system.startswith('win'):
@@ -108,6 +94,7 @@ def get_os_type() -> OSType:
 
 
 def os_type_to_asset_finder(type_: OSType) -> Pattern[AnyStr]:
+    """获取系统类型对应的 go-cqhttp 发行版正则匹配器"""
     if type_ == OSType.WINDOWS_AMD64:
         return re.compile(r'win.+amd64.*\.zip')  # type: ignore[arg-type]
     elif type_ == OSType.WINDOWS_I386:
@@ -119,8 +106,12 @@ def os_type_to_asset_finder(type_: OSType) -> Pattern[AnyStr]:
     raise UnknownSystemError(f'Unknown system: {type_}')
 
 
-def download_file(url: str, file_path: str):
-    """下载文件"""
+def download_file(url: str, file_path: str) -> None:
+    """下载文件并显示进度条
+
+    :param url: 文件url
+    :param file_path: 文件路径，需包含文件名，会覆盖已有文件
+    """
     file = Path(file_path)
     if file.is_dir() or file.is_symlink():
         raise FileExistsError(f'{file_path} is a directory or a symbolic link')
@@ -139,17 +130,28 @@ def download_file(url: str, file_path: str):
                 f.write(chunk)
 
 
-def decompress_file(file_path: str, decompress_path: str):
-    """解压文件"""
-    file = Path(file_path)
-    if file.is_dir() or file.is_symlink():
-        raise FileExistsError(f'{file_path} is a directory or a symbolic link')
-    Path('.', 'assets', 'gocq').mkdir(parents=True, exist_ok=True)
-    if file.suffix == '.zip':
-        with zipfile.ZipFile(file_path, 'r') as zip_file:
-            zip_file.extractall(decompress_path)
-    elif file.suffix == '.tar.gz':
-        with tarfile.open(file_path, 'r:gz') as tar_file:
-            tar_file.extractall(decompress_path)
-    else:
-        raise ValueError(f'Unknown file suffix: {file.suffix}')
+def checksum(filename, hash_factory=hashlib.md5, chunk_num_blocks=128) -> str:
+    """计算校验和(不会全部读入内存)
+
+    :param filename: 文件名
+    :param hash_factory: 哈希算法
+    :param chunk_num_blocks: 分块数
+    """
+    h = hash_factory()
+    with open(filename, 'rb') as f:
+        while chunk := f.read(chunk_num_blocks * h.block_size):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def get_random_str(length: int) -> str:
+    """生成数字+大小写随机字符串
+
+    :param length: 长度
+    """
+    char_list = string.ascii_letters + string.digits
+    return ''.join(random.choices(char_list, k=length))
+
+
+if __name__ == '__main__':
+    print(get_random_str(20))

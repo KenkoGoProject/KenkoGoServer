@@ -1,0 +1,14 @@
+### get status
+POST http://{{host}}:{{port}}/get_status
+Authorization: Bearer {{token}}
+
+### send msg
+POST http://{{host}}:{{port}}/send_msg
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "user_id": 1050314133,
+  "message": "message1",
+  "auto_escape": false
+}

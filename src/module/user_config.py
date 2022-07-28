@@ -1,10 +1,11 @@
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
+from module.singleton_type import SingletonType
 from module.yaml_config import YamlConfig
 
 
-class UserConfig:
-    host = '0.0.0.0'  # 监听地址
+class UserConfig(metaclass=SingletonType):
+    host = '127.0.0.1'  # 监听地址
     port = 18082  # 监听端口
 
     data: YamlConfig = {}
@@ -16,7 +17,7 @@ class UserConfig:
             self.log.set_level(LogLevel.DEBUG)
         self.load()
 
-    def load(self):
+    def load(self) -> None:
         self.log.debug(f'Loading config file: {self.file_path}')
         self.data = YamlConfig(self.file_path)
 
@@ -25,13 +26,13 @@ class UserConfig:
         self.host = str(self.data.get('host', self.host))
 
         # 若配置项不存在，则创建配置项
-        # TODO: 写出时保留注释
         self.data.setdefault('port', self.port)
         self.data.setdefault('host', self.host)
 
         self.log.debug(f'Config loaded: {dict(self.data)}')
 
-    def save(self):
+    def save(self) -> None:
         self.log.debug(f'Saving config file: {self.file_path}')
+        # TODO: 写出时保留注释
         self.data.save()
         self.log.debug(f'Config saved: {dict(self.data)}')

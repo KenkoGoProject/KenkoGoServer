@@ -9,6 +9,7 @@ from module.logger_ex import LoggerEx, LogLevel
 
 
 class InstanceController(APIRouter):
+    # TODO: 此处应使用单例模式
     def __init__(self, *args, **kwargs):
         super().__init__(prefix='/instance', *args, **kwargs)
         self.log = LoggerEx(self.__class__.__name__)
@@ -16,7 +17,7 @@ class InstanceController(APIRouter):
             self.log.set_level(LogLevel.DEBUG)
         self.log.debug(f'{self.__class__.__name__} Initializing...')
 
-        self.ws_log = LoggerEx('WebSocket')
+        self.ws_log = LoggerEx('GocqWebSocket')
         if Global().debug_mode:
             self.ws_log.set_level(LogLevel.DEBUG)
 
@@ -28,19 +29,6 @@ class InstanceController(APIRouter):
         self.add_api_route('/stop', self.stop, methods=['POST'])
         self.add_api_route('/qrcode', self.qrcode, methods=['GET'])
         self.add_api_websocket_route('', self.gocq_websocket)
-        self.add_api_websocket_route('/client', self.client_websocket)
-
-    async def client_websocket(self, ws: WebSocket, text: bool = False):
-        await self.websocket_manager.connect(ws, text)
-        client = ws.client
-        try:
-            while True:
-                s = await ws.receive_text()
-                self.ws_log.debug(f'{client.host}:{client.port} < {s}')
-        except WebSocketDisconnect:
-            await self.websocket_manager.disconnect(ws)
-        except Exception as e:
-            self.ws_log.error(f'{ws.client} : {e}')
 
     async def gocq_websocket(self, ws: WebSocket):
         await ws.accept()
@@ -50,6 +38,7 @@ class InstanceController(APIRouter):
             while True:
                 s = await ws.receive_text()
                 self.ws_log.debug(f'{client.host}:{client.port} < {s}')
+                Global().info_receive_from_gocq_count += 1
                 await self.websocket_manager.broadcast(s)
         except WebSocketDisconnect:
             self.ws_log.info(f'Gocq connection closed: {client.host}:{client.port}')

@@ -13,8 +13,8 @@ import Utils
 from GocqProcess.GocqProcess import GocqProcess
 from HttpServer.HttpServer import HttpServer
 
-from assets.gocq_event import GocqMessage
-from assets.server_status import ServerStatus
+from no_use.gocq_event import GocqMessage
+from no_use.server_status import ServerStatus
 
 Logger: logging.Logger = Utils.get_logger('   Server')
 Logger.setLevel(logging.DEBUG if '--debug' in sys.argv else logging.INFO)
@@ -100,7 +100,7 @@ class Server:
         if not os.path.isfile(gocq_path_config):
             Logger.debug('go-cqhttp 配置文件不存在，正在创建')
             _config = Utils.YamlConfig(gocq_path_config)
-            _config.set_data(Utils.default_gocq_config.copy())
+            _config.set_data(Utils.DEFAULT_GOCQ_CONFIG.copy())
             _config['account']['uin'] = int(self.config['account']['uin'])
             _config['default-middlewares']['access-token'] = gocq_access_token
             for server in _config['servers']:

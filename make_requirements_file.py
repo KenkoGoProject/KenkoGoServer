@@ -1,4 +1,4 @@
-# 生成 requirements.txt
+"""生成 requirements 文件"""
 import contextlib
 import subprocess
 

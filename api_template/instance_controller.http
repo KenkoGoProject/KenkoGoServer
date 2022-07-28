@@ -9,3 +9,6 @@ POST http://{{host}}:{{port}}/instance/stop
 
 ### Get QR Code
 GET http://{{host}}:{{port}}/instance/qrcode
+
+### no
+GET http://{{host}}:{{port}}/instance/qrcode1

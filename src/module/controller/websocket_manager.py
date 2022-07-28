@@ -8,10 +8,11 @@ from fastapi import WebSocket
 from module.global_dict import Global
 from module.json_encoder_ex import JsonEncoderEx
 from module.logger_ex import LoggerEx, LogLevel
-
-
 # WebSocket连接管理器
-class WebsocketManager:
+from module.singleton_type import SingletonType
+
+
+class WebsocketManager(metaclass=SingletonType):
 
     def __init__(self):
         self.log = LoggerEx(self.__class__.__name__)
@@ -21,13 +22,13 @@ class WebsocketManager:
 
         self.active_connections: List[Tuple[WebSocket, bool]] = []
 
-    async def connect(self, websocket: WebSocket, text: bool = False):
+    async def connect(self, websocket: WebSocket, blob: bool = False):
         await websocket.accept()
         client = websocket.client
         self.log.info(f'New client connection: {client.host}:{client.port}')
-        connection = (websocket, text)
+        connection = (websocket, blob)
         self.active_connections.append(connection)
-        await self.send_message(connection, 'Welcome!'.encode('utf-8'))
+        # await self.send_message(connection, 'Welcome!')
 
     def disconnect(self, websocket: WebSocket):
         client = websocket.client
@@ -36,17 +37,19 @@ class WebsocketManager:
             if connection[0] == websocket:
                 self.active_connections.remove(connection)
 
-    async def send_message(self, connection: Tuple[WebSocket, bool], message: Union[str, bytes, dict]):
-        if isinstance(message, str):
-            message = message.encode('utf-8')
-        elif isinstance(message, dict):
-            message = json.dumps(message, cls=JsonEncoderEx).encode('utf-8')
-        if connection[1]:
-            send_func = connection[0].send_text
+    @staticmethod
+    async def send_message(conn: Tuple[WebSocket, bool], message: Union[str, bytes, dict]):
+        if isinstance(message, dict):
+            message = json.dumps(message, cls=JsonEncoderEx)
+        if conn[1]:  # send_bytes
+            if isinstance(message, str):
+                message = message.encode('utf-8')
+        elif isinstance(message, bytes):
             message = message.decode('utf-8')
+        if conn[1]:
+            return await conn[0].send_bytes(message)
         else:
-            send_func = connection[0].send_bytes
-        await send_func(message)
+            return await conn[0].send_text(message)
 
     async def broadcast(self, message: Union[str, bytes, dict]):
         for connection in self.active_connections:

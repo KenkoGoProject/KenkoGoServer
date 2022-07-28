@@ -5,7 +5,7 @@ class SingletonType(type):
     _instance_lock = threading.Lock()
     _instance = None
 
-    def __call__(cls, *args, **kwargs):
+    def __call__(cls, *args, **kwargs) -> object:
         if not cls._instance:
             with cls._instance_lock:
                 if not cls._instance:

@@ -4,12 +4,14 @@ import subprocess
 import threading
 from typing import Union
 
-from assets.gocq_config import GocqConfig
 from module.global_dict import Global
+from module.gocq_config import GocqConfig
 from module.logger_ex import LoggerEx, LogLevel
 
 
-class GocqInstance:
+class GocqInstance:  # TODO: 此处应使用单例模式
+    """go-cqhttp 实例控制"""
+
     def __init__(self):
         self.log = LoggerEx(self.__class__.__name__)
         if Global().debug_mode:
@@ -18,15 +20,18 @@ class GocqInstance:
         if Global().debug_mode:
             self.proc_log.set_level(LogLevel.DEBUG)
 
-        self.gocq_config = GocqConfig()
-        self.process: Union[subprocess.Popen, None] = None
-        self.thread_read_output: Union[threading.Thread, None] = None
+        Global().gocq_config = GocqConfig()
+        self.process: Union[subprocess.Popen, None] = None  # go-cqhttp 实例进程
+        self.thread_read_output: Union[threading.Thread, None] = None  # 控制台输出检查线程
 
-    def check(self):
-        self.gocq_config.create_default_config()
+    def check(self) -> None:
+        """检查是否初始化"""
+        # TODO: 检查是否初始化
+        Global().gocq_config.create_default_config()
         shutil.copyfile(Global().gocq_bin_path, Global().gocq_path)
 
-    def start(self):
+    def start(self) -> None:
+        # TODO: 检查是否初始化与已启动
         self.log.debug('Starting gocq...')
         self.process = subprocess.Popen(
             args=f'{Global().gocq_path} -faststart',
@@ -38,9 +43,10 @@ class GocqInstance:
         self.thread_read_output = threading.Thread(target=self._read_output)
         self.thread_read_output.start()
 
-    def stop(self):
+    def stop(self) -> None:
+        # TODO: 检查是否初始化与已启动
         self.log.debug('Stopping gocq...')
-        if self.process.poll() is None:
+        if self.process and self.process.poll() is None:
             self.process.terminate()
             self.process.wait(2)
             if self.process.poll() is None:
@@ -51,7 +57,8 @@ class GocqInstance:
         self.process = None
         self.thread_read_output = None
 
-    def _read_output(self):
+    def _read_output(self) -> None:
+        """控制台输出检查线程"""
         while self.process.poll() is None:
             output_list = self.process.stdout.readlines(1)
             if not output_list:
@@ -81,5 +88,7 @@ class GocqInstance:
             self.handle_output(text_output)
 
     def handle_output(self, text_output: str):
+        """处理控制台输出"""
+        # TODO: 补充情况
         if text_output.startswith('请使用手机QQ扫描二维码 (qrcode.png)'):
             self.log.info(f'等待扫描二维码 http://{Global().host_with_port}/instance/qrcode')
