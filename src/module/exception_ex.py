@@ -8,3 +8,7 @@ class UnknownSystemError(Exception):
 
 class ReleaseNotFoundError(Exception):
     pass
+
+
+class DownloadError(Exception):
+    pass

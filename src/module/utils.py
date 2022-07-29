@@ -117,6 +117,8 @@ def download_file(url: str, file_path: str) -> None:
         raise FileExistsError(f'{file_path} is a directory or a symbolic link')
     if file.exists():
         file.unlink()
+    if file.exists():
+        raise FileExistsError(f'{file_path} cannot be deleted')
     file.parent.mkdir(parents=True, exist_ok=True)
     r = requests.get(url, stream=True)
     tracker = track(

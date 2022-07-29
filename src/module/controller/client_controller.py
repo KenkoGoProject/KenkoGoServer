@@ -84,6 +84,7 @@ class ClientController(APIRouter):
         await file.close()
         self.log.debug(f'{r}')
         new_name = Path(Global().download_dir, md5)
+        new_name = new_name.with_suffix(f'.{file_type}')
         if not new_name.exists():
             new_name.unlink(missing_ok=True)
         local_file.rename(new_name)

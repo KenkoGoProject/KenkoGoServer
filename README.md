@@ -87,6 +87,8 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 ### 待办事项 Todo
 
 - [ ] 获取上传的文件列表
+- [ ] 定时删除过期的文件
+- [ ] 实例运行时允许先下载其他版本，其他时间再替换
 - [ ] 编写 Nuitka 脚本
 - [ ] 集成 [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
 - [ ] 集成 [pydis](https://github.com/Zombie123456/pydis)

@@ -22,7 +22,9 @@ class GocqBinaryController(APIRouter):
 
     async def get_remote_version(self, use_cache: bool = True) -> dict:
         """获取远端发行版列表"""
-        return HttpResult.success(self.gocq_binary_manager.get_remote_release(use_cache))
+        if data := self.gocq_binary_manager.get_remote_release(use_cache):
+            return HttpResult.success(data)
+        return HttpResult.error(data)
 
     async def download_remote_version(self, version: str = None) -> dict:
         """下载远端发行版"""
@@ -30,4 +32,6 @@ class GocqBinaryController(APIRouter):
             self.gocq_binary_manager.download_remote_version(version)
         except ReleaseNotFoundError:
             return HttpResult.not_found('Release not found.')
+        except Exception as e:
+            return HttpResult.error(str(e))
         return HttpResult.success()

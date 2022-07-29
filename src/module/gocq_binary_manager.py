@@ -34,7 +34,11 @@ class GocqBinaryManager(metaclass=SingletonType):
             return self.remote_versions
         self.log.debug('Getting remote version...')
         release_url = 'https://api.github.com/repos/Mrs4s/go-cqhttp/releases'
-        release_content: list[dict] = requests.get(release_url).json()
+        try:
+            release_content: list[dict] = requests.get(release_url).json()
+        except Exception as e:
+            self.log.error(f'Get remote version failed: {e}')
+            return []
         result: list[Release] = []
         for item in release_content:
             obj: Release = dict_to_object(item, Release)
@@ -44,29 +48,39 @@ class GocqBinaryManager(metaclass=SingletonType):
         self.remote_versions = result
         return result
 
-    def download_remote_version(self, tag_name: str = None) -> None:
+    def download_remote_version(self, tag_name: str = None) -> bool:
         """下载远端发行版
 
         :param tag_name: 标签名
         """
-        # TODO: review
-        self.get_remote_release()
+        if Global().gocq_instance_manager.instance_started:
+            self.log.error('Cannot download remote version while go-cqhttp is running.')
+            return False
+
+        remote_versions = self.get_remote_release()
         if not tag_name:
-            tag_name = self.remote_versions[0].tag_name
+            tag_name = remote_versions[0].tag_name
         self.log.debug(f'Looking for remote version: {tag_name}')
 
-        for release in self.remote_versions:
+        finder = os_type_to_asset_finder(get_os_type())
+        for release in remote_versions:
             if release.tag_name == tag_name:
-                os_type = get_os_type()
-                finder = os_type_to_asset_finder(os_type)
                 for asset in release.assets:
                     if finder.search(asset.name):
                         self.log.debug(f'Found {asset.name}')
                         self.log.debug(f'Url {asset.browser_download_url}')
-                        file_path = Path(Global().download_dir) / 'gocq.compression'
-                        download_file(asset.browser_download_url, str(file_path))
-                        self.decompress_gocq(str(file_path))
-                        return
+                        file_path = Path(Global().download_dir, 'gocq.compression')
+                        try:
+                            download_file(asset.browser_download_url, str(file_path))
+                        except Exception as e:
+                            self.log.error(f'Download failed: {e}')
+                            return False
+                        try:
+                            self.decompress_gocq(str(file_path))
+                        except Exception as e:
+                            self.log.error(f'Decompress failed: {e}')
+                            return False
+                        return True
         raise ReleaseNotFoundError(f'Release {tag_name} not found.')
 
     def decompress_gocq(self, file_path: str) -> None:
@@ -74,19 +88,25 @@ class GocqBinaryManager(metaclass=SingletonType):
 
         :param file_path: gocq.compression文件路径
         """
-        # TODO: review
+
+        if Global().gocq_instance_manager.instance_started:
+            self.log.error('Cannot decompress gocq.compression while go-cqhttp is running.')
+            return
+
         self.log.debug('Decompressing gocq.compression...')
-        Global().gocq_asset_dir.mkdir(parents=True, exist_ok=True)
+        Global().gocq_dir.mkdir(parents=True, exist_ok=True)
         os_type = get_os_type()
         if os_type in [OSType.WINDOWS_AMD64, OSType.WINDOWS_I386]:
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
                 if Global().gocq_binary_name not in zip_ref.namelist():
                     raise FileNotFoundError(f'{Global().gocq_binary_name} not found.')
-                zip_ref.extract(Global().gocq_binary_name, Global().gocq_asset_dir)
+                zip_ref.extract(Global().gocq_binary_name, Global().gocq_dir)
         elif os_type in [OSType.LINUX_AMD64, OSType.LINUX_I386]:
             with tarfile.open(file_path, 'r:gz') as tar_ref:
                 if Global().gocq_binary_name not in tar_ref.getnames():
                     raise FileNotFoundError(f'{Global().gocq_binary_name} not found.')
-                tar_ref.extract(Global().gocq_binary_name, Global().gocq_asset_dir)
+                tar_ref.extract(Global().gocq_binary_name, Global().gocq_dir)
+        else:
+            raise NotImplementedError(f'{os_type} not supported.')
 
     # TODO: 删除等操作

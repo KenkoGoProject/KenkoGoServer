@@ -1,9 +1,9 @@
 import re
-import shutil
 import subprocess
 import threading
 from typing import Union
 
+from module.exception_ex import DownloadError
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
@@ -29,9 +29,23 @@ class GocqInstanceManager(metaclass=SingletonType):
 
     def check(self) -> None:
         """检查是否初始化"""
-        # TODO: 检查是否初始化
-        Global().gocq_config.create_default_config()
-        shutil.copyfile(Global().gocq_binary_path, Global().gocq_path)
+
+        # 检查 go-cqhttp 是否存在
+        if not Global().gocq_path.exists():
+            self.log.debug('gocq not found, try to download it.')
+            try:
+                ok = Global().gocq_binary_manager.download_remote_version()
+                if not ok:
+                    raise DownloadError('Download failed.')
+            except Exception as e:
+                self.log.error(e)
+                self.ready_to_start = False
+                return
+
+        # 检查配置文件
+
+
+        self.ready_to_start = True
 
     def start(self) -> bool:
         if self.instance_started:

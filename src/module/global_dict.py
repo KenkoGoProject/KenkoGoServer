@@ -67,28 +67,25 @@ class Global(metaclass=SingletonType):
     ############
 
     root_dir = Path('.')  # 根目录
-    asset_dir = Path(root_dir, 'assets')  # 静态资源目录
     download_dir = Path(root_dir, 'downloads')  # 下载目录
-    gocq_asset_dir = Path(download_dir, 'gocq')  # gocq 资源目录
 
     gocq_dir = Path(root_dir, 'gocq')  # gocq实例目录
     gocq_config_path = Path(gocq_dir, 'config.yml')  # gocq配置文件路径
     qrcode_path = Path(gocq_dir, 'qrcode.png')  # 二维码路径
 
     def __init__(self):
-        for dir_ in [self.asset_dir, self.download_dir, self.gocq_asset_dir, self.gocq_dir]:
+        for dir_ in [self.download_dir, self.gocq_dir]:
             dir_.mkdir(parents=True, exist_ok=True)
 
         os_type = get_os_type()
         if os_type in [OSType.WINDOWS_AMD64, OSType.WINDOWS_I386]:
-            self.gocq_binary_name = 'go-cqhttp.exe'
+            self.gocq_binary_name = 'go-cqhttp.exe'  # Windows go-cqhttp 二进制文件名
         elif os_type in [OSType.LINUX_AMD64, OSType.LINUX_I386]:
-            self.gocq_binary_name = 'go-cqhttp'
+            self.gocq_binary_name = 'go-cqhttp'  # Linux go-cqhttp 二进制文件名
         else:
             raise TypeError(f'Unsupported OS type: {os_type}')
 
-        self.gocq_path = Path(self.gocq_dir, self.gocq_binary_name)
-        self.gocq_binary_path = Path(self.gocq_asset_dir, self.gocq_binary_name)
+        self.gocq_path = Path(self.gocq_dir, self.gocq_binary_name)  # go-cqhttp 可执行文件路径
 
 
 if __name__ == '__main__':

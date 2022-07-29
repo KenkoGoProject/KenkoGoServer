@@ -19,11 +19,12 @@ class KenkoGo:
         self.log = LoggerEx(self.__class__.__name__)
         if Global().debug_mode:
             self.log.set_level(LogLevel.DEBUG)
+        # 一定要严格按照顺序初始化，否则可能会出现异常
         Global().gocq_config = GocqConfig()
         Global().websocket_manager = WebsocketManager()
-        Global().gocq_binary_manager = GocqBinaryManager()
         Global().gocq_instance_manager = GocqInstanceManager()
-        self.http_app = HttpServer()  # 一定要最后再实例化，因为它依赖全局变量
+        Global().gocq_binary_manager = GocqBinaryManager()
+        self.http_app = HttpServer()
         self.http_thread = None
 
         # 打印版本信息
