@@ -53,7 +53,7 @@ class GocqBinaryManager(metaclass=SingletonType):
 
         :param tag_name: 标签名
         """
-        if Global().gocq_instance_manager.instance_started:
+        if Global().instance_manager.instance_started:
             self.log.error('Cannot download remote version while go-cqhttp is running.')
             return False
 
@@ -89,7 +89,7 @@ class GocqBinaryManager(metaclass=SingletonType):
         :param file_path: gocq.compression文件路径
         """
 
-        if Global().gocq_instance_manager.instance_started:
+        if Global().instance_manager.instance_started:
             self.log.error('Cannot decompress gocq.compression while go-cqhttp is running.')
             return
 

@@ -22,7 +22,7 @@ class KenkoGo:
         # 一定要严格按照顺序初始化，否则可能会出现异常
         Global().gocq_config = GocqConfig()
         Global().websocket_manager = WebsocketManager()
-        Global().gocq_instance_manager = GocqInstanceManager()
+        Global().instance_manager = GocqInstanceManager()
         Global().gocq_binary_manager = GocqBinaryManager()
         self.http_app = HttpServer()
         self.http_thread = None

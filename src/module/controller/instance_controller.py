@@ -22,7 +22,7 @@ class InstanceController(APIRouter):
         if Global().debug_mode:
             self.ws_log.set_level(LogLevel.DEBUG)
 
-        self.instance_manager = Global().gocq_instance_manager
+        self.instance_manager = Global().instance_manager
         self.websocket_manager = Global().websocket_manager
 
         self.add_api_websocket_route('', self.gocq_websocket_proxy)

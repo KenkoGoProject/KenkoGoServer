@@ -19,7 +19,7 @@ class UserConfig(metaclass=SingletonType):
 
     def load(self) -> None:
         self.log.debug(f'Loading config file: {self.file_path}')
-        self.data = YamlConfig(self.file_path, auto_save=False)
+        self.data = YamlConfig(self.file_path)
 
         # 读取配置
         self.port = int(self.data.get('port', self.port))

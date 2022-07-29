@@ -8,18 +8,17 @@ from module.atomicwrites import atomic_write
 class YamlConfig(UserDict):
     """yaml 文件读写操作"""
 
-    def __init__(self, path, auto_load=True, auto_save=True, auto_create=True):
+    def __init__(self, path: str, auto_load=True, auto_create=True):
         """yaml文件操作类
 
         :param path: yaml文件路径
         :param auto_load: 自动加载文件
-        :param auto_save: 自动保存文件
         :param auto_create: 自动创建文件
         """
         super().__init__()
         self.path = path
         self.yaml_controller = yaml.YAML()
-        self.auto_save = auto_save
+        self.data = {}
         self.auto_create = auto_create
         if auto_load:
             self.load()
@@ -40,9 +39,9 @@ class YamlConfig(UserDict):
         with atomic_write(self.path, overwrite=True, encoding='utf-8') as f:
             self.yaml_controller.dump(self.data, f)
 
-    def __setitem__(self, key, value):
-        if super().__getitem__(key) == value:
-            return
-        super().__setitem__(key, value)
-        if self.auto_save:
-            self.save()
+    def cover(self, new_data: dict) -> None:
+        """设置为新的数据
+
+        :param new_data: 新的数据
+        """
+        self.data = new_data

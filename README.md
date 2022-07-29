@@ -83,14 +83,16 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 - [requests 2.28.1](https://requests.readthedocs.io/en/latest/) HTTP客户端
 - [websockets 10.3](https://websockets.readthedocs.io/en/stable/) Websocket 协议框架
 - [python-multipart 0.0.5](https://github.com/andrew-d/python-multipart) 提供 multipart/form-data 的上传功能
+- [psutil 5.9.1](https://github.com/giampaolo/psutil) 系统信息获取工具
+- [distro 1.7.0](https://github.com/python-distro/distro) 系统平台信息获取工具
 
 ### 待办事项 Todo
 
+- [ ] 实例http端口被占用自动重设
 - [ ] 获取上传的文件列表
 - [ ] 定时删除过期的文件
 - [ ] 实例运行时允许先下载其他版本，其他时间再替换
 - [ ] 编写 Nuitka 脚本
-- [ ] 集成 [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
 - [ ] 集成 [pydis](https://github.com/Zombie123456/pydis)
 - [ ] 为 NoneBot2 的驱动提供接口
 - [ ] 集成 [Socket.IO](https://github.com/miguelgrinberg/python-socketio)

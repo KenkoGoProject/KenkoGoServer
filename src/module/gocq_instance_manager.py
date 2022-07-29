@@ -43,8 +43,7 @@ class GocqInstanceManager(metaclass=SingletonType):
                 return
 
         # 检查配置文件
-
-
+        Global().gocq_config.refresh()
         self.ready_to_start = True
 
     def start(self) -> bool:
@@ -75,6 +74,7 @@ class GocqInstanceManager(metaclass=SingletonType):
             return False
         self.log.debug('Stopping gocq...')
         self.instance_started = False
+        self.ready_to_start = False
         if self.process and self.process.poll() is None:
             self.process.terminate()
             self.process.wait(2)

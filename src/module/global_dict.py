@@ -1,10 +1,16 @@
+import platform
 from pathlib import Path
 from typing import Optional
+
+import psutil
 
 from assets.os_type import OSType
 from module.console import Console
 from module.singleton_type import SingletonType
-from module.utils import get_os_type, get_self_ip
+from module.utils import (get_os_type, get_script_memory_usage,
+                          get_script_uptime, get_self_ip,
+                          get_system_description, get_system_memory_usage,
+                          get_system_uptime)
 
 
 class Global(metaclass=SingletonType):
@@ -16,8 +22,8 @@ class Global(metaclass=SingletonType):
 
     app_name = 'KenkoGo'  # 应用名称
     author_name = 'AkagiYui'  # 作者
-    version_num = 11  # 版本号
-    version_str = '0.2.0'  # 版本名称
+    version_num = 12  # 版本号
+    version_str = '0.2.1'  # 版本名称
     description = 'A Controller of go-cqhttp'  # 描述
 
     ############
@@ -34,7 +40,19 @@ class Global(metaclass=SingletonType):
     def information(self) -> dict:
         """获取应用信息"""
         return {
-            'gocq_msg_count': self.info_receive_from_gocq_count,
+            'python_version': platform.python_version(),
+            'system_description': get_system_description(),
+
+            'system_cpu_present': psutil.cpu_percent(),
+            # 'kenkogo_cpu_present': get_script_cpu_present(),
+            'system_memory_usage': get_system_memory_usage(),
+            'kenkogo_memory_usage': get_script_memory_usage(),
+
+            'system_uptime': get_system_uptime(),
+            'kenkogo_uptime': get_script_uptime(),
+
+            'instance_running': self.instance_manager.instance_started,  # 实例是否运行
+            'gocq_msg_count': self.info_receive_from_gocq_count,  # 接收到的信息数量
         }
 
     @property
@@ -57,7 +75,7 @@ class Global(metaclass=SingletonType):
     gocq_config = None  # go-cqhttp 配置文件 # GocqConfig
     websocket_manager = None  # WebSocketManager
     gocq_binary_manager = None  # go-cqhttp 二进制文件管理器
-    gocq_instance_manager = None  # GocqInstanceManager
+    instance_manager = None  # GocqInstanceManager
 
     args_known = ()  # 命令行参数
     args_unknown = ()  # 未知命令
