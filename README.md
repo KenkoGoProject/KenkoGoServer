@@ -21,7 +21,7 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 这是一个 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp) 守护程序
 
 用来管理一个~~或多个~~ go-cqhttp 进程，监听并转发事件。
-提供`掉线重连`,`风控提示`等功能。
+~~提供`掉线重连`,`风控提示`等功能。~~
 
 ## 快速开始 Quick Start
 
@@ -62,9 +62,9 @@ chmod +x ./kenkogo
 
 Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/downloads/release/python-3913/)
 
-构建工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)
+~~构建工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)~~
 
-数据库: [SQLite](https://www.sqlite.org/index.html)
+~~数据库: [SQLite](https://www.sqlite.org/index.html)~~
 
 自动构建: [GitHub Actions](https://https://docs.github.com/cn/actions)
 
@@ -82,15 +82,17 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 - [fastapi 0.79.0](https://fastapi.tiangolo.com/zh/) HTTP/Websocket服务器
 - [requests 2.28.1](https://requests.readthedocs.io/en/latest/) HTTP客户端
 - [websockets 10.3](https://websockets.readthedocs.io/en/stable/) Websocket 协议框架
+- [python-multipart 0.0.5](https://github.com/andrew-d/python-multipart) 提供 multipart/form-data 的上传功能
 
 ### 待办事项 Todo
 
-- [ ] 集成 [Socket.IO](https://github.com/miguelgrinberg/python-socketio)
+- [ ] 获取上传的文件列表
+- [ ] 编写 Nuitka 脚本
 - [ ] 集成 [distro](https://github.com/python-distro/distro) 系统平台信息获取工具
 - [ ] 集成 [pydis](https://github.com/Zombie123456/pydis)
-- [ ] 集成 [retrying](https://github.com/rholder/retrying)
-- [ ] 编写 Nuitka 脚本
 - [ ] 为 NoneBot2 的驱动提供接口
+- [ ] 集成 [Socket.IO](https://github.com/miguelgrinberg/python-socketio)
+- [ ] 集成 [retrying](https://github.com/rholder/retrying)
 
 ## 从代码开始 Start from Code
 

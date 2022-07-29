@@ -1,13 +1,15 @@
 import time
+from typing import Union
 
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
 
 from assets.http_result import HttpResult
 from module.controller.client_controller import ClientController
-from module.controller.gocq_bin_controller import GocqBinController
+from module.controller.gocq_binary_controller import GocqBinaryController
 from module.controller.information_controller import InformationController
 from module.controller.instance_controller import InstanceController
 from module.global_dict import Global
@@ -29,24 +31,25 @@ class HttpServer(FastAPI):
         self.add_event_handler('shutdown', func=self.server_shutdown)
         self.add_middleware(BaseHTTPMiddleware, dispatch=self.http_middleware)
         self.add_exception_handler(HTTPException, handler=self.exception_handler_ex)
+        self.add_exception_handler(RequestValidationError, handler=self.exception_handler_ex)
 
         self.router.add_api_route('/', self.route_root, methods=['GET', 'POST'])
-        self.router.include_router(GocqBinController())
+        self.router.include_router(GocqBinaryController())
         self.router.include_router(InstanceController())
         self.router.include_router(InformationController())
         self.router.include_router(ClientController())
-        self.router.add_api_route('*', self.route_404,
-                                  methods=['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'])
 
     @staticmethod
-    async def exception_handler_ex(_: Request, exc: HTTPException) -> JSONResponse:
+    async def exception_handler_ex(_: Request, exc: Union[HTTPException, RequestValidationError]) -> JSONResponse:
         """异常处理"""
         headers = getattr(exc, 'headers', None)
-        if exc.status_code == 404:
-            content = HttpResult.not_found(exc.detail)
-        else:
-            content = HttpResult.error(exc.detail)
-        return JSONResponse(content=content, status_code=exc.status_code, headers=headers)
+        if isinstance(exc, HTTPException):
+            if exc.status_code == 404:
+                content = HttpResult.not_found(exc.detail)
+            else:
+                content = HttpResult.error(exc.detail)
+            return JSONResponse(content=content, status_code=exc.status_code, headers=headers)
+        return JSONResponse(content=HttpResult.bad_request(), status_code=400, headers=headers)
 
     async def server_startup(self) -> None:
         """事件 服务启动"""
@@ -74,8 +77,3 @@ class HttpServer(FastAPI):
     async def route_root() -> dict:
         """根路由"""
         return HttpResult.success(f'This is {Global().app_name}!')
-
-    @staticmethod
-    async def route_404() -> dict:
-        """404路由"""
-        return HttpResult.not_found('Not Found')

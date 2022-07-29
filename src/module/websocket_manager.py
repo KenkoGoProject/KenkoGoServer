@@ -8,11 +8,11 @@ from fastapi import WebSocket
 from module.global_dict import Global
 from module.json_encoder_ex import JsonEncoderEx
 from module.logger_ex import LoggerEx, LogLevel
-# WebSocket连接管理器
 from module.singleton_type import SingletonType
 
 
 class WebsocketManager(metaclass=SingletonType):
+    """WebSocket连接管理器"""
 
     def __init__(self):
         self.log = LoggerEx(self.__class__.__name__)
@@ -20,17 +20,24 @@ class WebsocketManager(metaclass=SingletonType):
             self.log.set_level(LogLevel.DEBUG)
         self.log.debug(f'{self.__class__.__name__} Initializing...')
 
-        self.active_connections: List[Tuple[WebSocket, bool]] = []
+        self.active_connections: List[Tuple[WebSocket, bool]] = []  # 存活连接
 
-    async def connect(self, websocket: WebSocket, blob: bool = False):
-        await websocket.accept()
+    async def connect(self, websocket: WebSocket, blob: bool = False) -> None:
+        """接受新的WebSocket连接
+
+        :param websocket: WebSocket连接
+        :param blob: 是否使用blob编码
+        """
+        await websocket.accept()  # 接受连接
         client = websocket.client
         self.log.info(f'New client connection: {client.host}:{client.port}')
-        connection = (websocket, blob)
-        self.active_connections.append(connection)
-        # await self.send_message(connection, 'Welcome!')
+        self.active_connections.append((websocket, blob))
 
-    def disconnect(self, websocket: WebSocket):
+    def disconnect(self, websocket: WebSocket) -> None:
+        """断开连接
+
+        :param websocket: WebSocket连接
+        """
         client = websocket.client
         self.log.info(f'Client connection closed: {client.host}:{client.port}')
         for connection in self.active_connections:

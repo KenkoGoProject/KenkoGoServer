@@ -31,6 +31,13 @@ class Global(metaclass=SingletonType):
     info_receive_from_gocq_count = 0  # 接收到的信息数量
 
     @property
+    def information(self) -> dict:
+        """获取应用信息"""
+        return {
+            'gocq_msg_count': self.info_receive_from_gocq_count,
+        }
+
+    @property
     def host_with_port(self) -> Optional[str]:  # host:port
         if not self.user_config:
             return None
@@ -48,6 +55,9 @@ class Global(metaclass=SingletonType):
     command_handler = None  # 命令处理器  # type: CommandHandler
     kenko_go = None  # 应用程序  # type: KenkoGo
     gocq_config = None  # go-cqhttp 配置文件 # GocqConfig
+    websocket_manager = None  # WebSocketManager
+    gocq_binary_manager = None  # go-cqhttp 二进制文件管理器
+    gocq_instance_manager = None  # GocqInstanceManager
 
     args_known = ()  # 命令行参数
     args_unknown = ()  # 未知命令
@@ -71,14 +81,14 @@ class Global(metaclass=SingletonType):
 
         os_type = get_os_type()
         if os_type in [OSType.WINDOWS_AMD64, OSType.WINDOWS_I386]:
-            self.gocq_bin_name = 'go-cqhttp.exe'
+            self.gocq_binary_name = 'go-cqhttp.exe'
         elif os_type in [OSType.LINUX_AMD64, OSType.LINUX_I386]:
-            self.gocq_bin_name = 'go-cqhttp'
+            self.gocq_binary_name = 'go-cqhttp'
         else:
             raise TypeError(f'Unsupported OS type: {os_type}')
 
-        self.gocq_path = Path(self.gocq_dir, self.gocq_bin_name)
-        self.gocq_bin_path = Path(self.gocq_asset_dir, self.gocq_bin_name)
+        self.gocq_path = Path(self.gocq_dir, self.gocq_binary_name)
+        self.gocq_binary_path = Path(self.gocq_asset_dir, self.gocq_binary_name)
 
 
 if __name__ == '__main__':

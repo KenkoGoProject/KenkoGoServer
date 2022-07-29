@@ -7,6 +7,7 @@ from module.logger_ex import LoggerEx, LogLevel
 
 class InformationController(APIRouter):
     # TODO: 此处应使用单例模式
+
     def __init__(self, *args, **kwargs):
         super().__init__(prefix='/info', *args, **kwargs)
         self.log = LoggerEx(self.__class__.__name__)
@@ -16,7 +17,7 @@ class InformationController(APIRouter):
 
         self.add_api_route('', self.overview, methods=['GET'])
 
-    async def overview(self):
-        return HttpResult.success({
-            'gocq_msg_count': Global().info_receive_from_gocq_count,
-        })
+    @staticmethod
+    async def overview() -> dict:
+        """数据概览"""
+        return HttpResult.success(Global().information)

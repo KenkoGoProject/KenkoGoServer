@@ -14,7 +14,7 @@ from module.utils import (dict_to_object, download_file, get_os_type,
                           os_type_to_asset_finder)
 
 
-class GocqBin(metaclass=SingletonType):
+class GocqBinaryManager(metaclass=SingletonType):
     """go-cqhttp 二进制文件处理"""
 
     def __init__(self):
@@ -81,13 +81,13 @@ class GocqBin(metaclass=SingletonType):
         os_type = get_os_type()
         if os_type in [OSType.WINDOWS_AMD64, OSType.WINDOWS_I386]:
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
-                if Global().gocq_bin_name not in zip_ref.namelist():
-                    raise FileNotFoundError(f'{Global().gocq_bin_name} not found.')
-                zip_ref.extract(Global().gocq_bin_name, Global().gocq_asset_dir)
+                if Global().gocq_binary_name not in zip_ref.namelist():
+                    raise FileNotFoundError(f'{Global().gocq_binary_name} not found.')
+                zip_ref.extract(Global().gocq_binary_name, Global().gocq_asset_dir)
         elif os_type in [OSType.LINUX_AMD64, OSType.LINUX_I386]:
             with tarfile.open(file_path, 'r:gz') as tar_ref:
-                if Global().gocq_bin_name not in tar_ref.getnames():
-                    raise FileNotFoundError(f'{Global().gocq_bin_name} not found.')
-                tar_ref.extract(Global().gocq_bin_name, Global().gocq_asset_dir)
+                if Global().gocq_binary_name not in tar_ref.getnames():
+                    raise FileNotFoundError(f'{Global().gocq_binary_name} not found.')
+                tar_ref.extract(Global().gocq_binary_name, Global().gocq_asset_dir)
 
     # TODO: 删除等操作

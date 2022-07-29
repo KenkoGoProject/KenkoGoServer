@@ -9,7 +9,7 @@ from module.gocq_config import GocqConfig
 from module.logger_ex import LoggerEx, LogLevel
 
 
-class GocqInstance:  # TODO: 此处应使用单例模式
+class GocqInstanceManager:  # TODO: 此处应使用单例模式
     """go-cqhttp 实例控制"""
 
     def __init__(self):
@@ -28,7 +28,7 @@ class GocqInstance:  # TODO: 此处应使用单例模式
         """检查是否初始化"""
         # TODO: 检查是否初始化
         Global().gocq_config.create_default_config()
-        shutil.copyfile(Global().gocq_bin_path, Global().gocq_path)
+        shutil.copyfile(Global().gocq_binary_path, Global().gocq_path)
 
     def start(self) -> None:
         # TODO: 检查是否初始化与已启动
