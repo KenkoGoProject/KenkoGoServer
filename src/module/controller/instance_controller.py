@@ -9,7 +9,7 @@ from module.logger_ex import LoggerEx, LogLevel
 
 
 class InstanceController(APIRouter):
-    # TODO: 此处应使用单例模式
+    """go-cqhttp 实例操作接口"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(prefix='/instance', *args, **kwargs)
@@ -25,11 +25,10 @@ class InstanceController(APIRouter):
         self.instance_manager = Global().gocq_instance_manager
         self.websocket_manager = Global().websocket_manager
 
-        self.add_api_route('/check', self.check, methods=['POST'])
+        self.add_api_websocket_route('', self.gocq_websocket_proxy)
         self.add_api_route('/start', self.start, methods=['POST'])
         self.add_api_route('/stop', self.stop, methods=['POST'])
         self.add_api_route('/qrcode', self.qrcode, methods=['GET'])
-        self.add_api_websocket_route('', self.gocq_websocket_proxy)
 
     async def gocq_websocket_proxy(self, ws: WebSocket) -> None:
         """go-cqhttp WebSocket 转发代理"""
@@ -47,17 +46,19 @@ class InstanceController(APIRouter):
         except Exception as e:
             self.ws_log.error(f'{client} : {e}')
 
-    async def check(self) -> dict:
-        """检查实例状态"""
-        return HttpResult.success(self.instance_manager.check())
-
     async def start(self) -> dict:
         """启动实例"""
-        return HttpResult.success(self.instance_manager.start())
+        if self.instance_manager.start():
+            return HttpResult.success()
+        else:
+            return HttpResult.forbidden('Instance already started.')
 
     async def stop(self) -> dict:
         """停止实例"""
-        return HttpResult.success(self.instance_manager.stop())
+        if self.instance_manager.stop():
+            return HttpResult.success()
+        else:
+            return HttpResult.forbidden('Instance already stopped.')
 
     async def qrcode(self) -> Union[FileResponse, dict]:
         """返回二维码图片"""

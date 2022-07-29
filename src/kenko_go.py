@@ -3,6 +3,7 @@ import uvicorn as uvicorn
 from module.exception_ex import PortInUseError
 from module.global_dict import Global
 from module.gocq_binary_manager import GocqBinaryManager
+from module.gocq_config import GocqConfig
 from module.gocq_instance_manager import GocqInstanceManager
 from module.http_server import HttpServer
 from module.logger_ex import LoggerEx, LogLevel
@@ -18,6 +19,7 @@ class KenkoGo:
         self.log = LoggerEx(self.__class__.__name__)
         if Global().debug_mode:
             self.log.set_level(LogLevel.DEBUG)
+        Global().gocq_config = GocqConfig()
         Global().websocket_manager = WebsocketManager()
         Global().gocq_binary_manager = GocqBinaryManager()
         Global().gocq_instance_manager = GocqInstanceManager()

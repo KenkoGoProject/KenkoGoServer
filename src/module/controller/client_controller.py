@@ -12,7 +12,7 @@ from module.utils import get_random_str
 
 
 class ClientController(APIRouter):
-    # TODO: 此处应使用单例模式
+    """客户端接口"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(prefix='/client', *args, **kwargs)
@@ -64,13 +64,12 @@ class ClientController(APIRouter):
         self.log.debug(f'{response.status_code} {response.text}')
         return response.json()
 
-    @staticmethod
-    async def upload_file(file: UploadFile, _: Request):
+    async def upload_file(self, file: UploadFile, _: Request):
         """上传文件到服务器"""
-        file.file.seek(0)
-        h = hashlib.md5()
         file_type = PurePath(file.filename).suffix[1:].lower()
         local_file = Path(Global().download_dir, get_random_str(20))
+        h = hashlib.md5()
+        file.file.seek(0)
         with local_file.open('wb') as real_file:
             while chunk := file.file.read(128 * h.block_size):
                 h.update(chunk)  # 对数据进行hash
@@ -83,6 +82,7 @@ class ClientController(APIRouter):
             'md5': md5,
         }
         await file.close()
+        self.log.debug(f'{r}')
         new_name = Path(Global().download_dir, md5)
         if not new_name.exists():
             new_name.unlink(missing_ok=True)

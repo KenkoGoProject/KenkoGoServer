@@ -5,7 +5,7 @@ from module.yaml_config import YamlConfig
 
 
 class UserConfig(metaclass=SingletonType):
-    host = '127.0.0.1'  # 监听地址
+    host = '0.0.0.0'  # 监听地址
     port = 18082  # 监听端口
 
     data: YamlConfig = {}
@@ -19,7 +19,7 @@ class UserConfig(metaclass=SingletonType):
 
     def load(self) -> None:
         self.log.debug(f'Loading config file: {self.file_path}')
-        self.data = YamlConfig(self.file_path)
+        self.data = YamlConfig(self.file_path, auto_save=False)
 
         # 读取配置
         self.port = int(self.data.get('port', self.port))

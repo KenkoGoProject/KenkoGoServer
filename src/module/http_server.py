@@ -14,10 +14,10 @@ from module.controller.information_controller import InformationController
 from module.controller.instance_controller import InstanceController
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
+from module.singleton_type import SingletonType
 
 
-class HttpServer(FastAPI):
-    # TODO: 此处应使用单例模式
+class HttpServer(FastAPI, metaclass=SingletonType):
 
     def __init__(self):
         """初始化"""

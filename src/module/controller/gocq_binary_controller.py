@@ -7,10 +7,10 @@ from module.logger_ex import LoggerEx, LogLevel
 
 
 class GocqBinaryController(APIRouter):
-    # TODO: 此处应使用单例模式
+    """go-cqhttp 二进制文件操作接口"""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(prefix='/gocqbin', *args, **kwargs)
+        super().__init__(prefix='/binary', *args, **kwargs)
         self.log = LoggerEx(self.__class__.__name__)
         if Global().debug_mode:
             self.log.set_level(LogLevel.DEBUG)

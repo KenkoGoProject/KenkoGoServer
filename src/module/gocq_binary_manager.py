@@ -29,7 +29,6 @@ class GocqBinaryManager(metaclass=SingletonType):
         :param use_cache: 是否使用缓存
         :return: 远端发行版列表
         """
-        # TODO: review
         if use_cache and self.remote_versions:
             self.log.debug('Get remote version from cache.')
             return self.remote_versions

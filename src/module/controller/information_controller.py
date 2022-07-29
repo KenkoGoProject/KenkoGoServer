@@ -6,7 +6,7 @@ from module.logger_ex import LoggerEx, LogLevel
 
 
 class InformationController(APIRouter):
-    # TODO: 此处应使用单例模式
+    """信息接口"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(prefix='/info', *args, **kwargs)
