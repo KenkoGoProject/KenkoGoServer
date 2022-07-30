@@ -85,10 +85,13 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 - [python-multipart 0.0.5](https://github.com/andrew-d/python-multipart) 提供 multipart/form-data 的上传功能
 - [psutil 5.9.1](https://github.com/giampaolo/psutil) 系统信息获取工具
 - [distro 1.7.0](https://github.com/python-distro/distro) 系统平台信息获取工具
+- [Pillow 9.2.0](https://python-pillow.org/) 图像处理工具
+- [qrcode 7.3.1](https://github.com/lincolnloop/python-qrcode) 二维码生成工具
+- [pyzbar 0.1.9](https://pypi.org/project/pyzbar/) 二维码识别工具
 
 ### 待办事项 Todo
 
-- [ ] 实例http端口被占用自动重设
+- [ ] 记录客户端登入时间戳
 - [ ] 获取上传的文件列表
 - [ ] 定时删除过期的文件
 - [ ] 实例运行时允许先下载其他版本，其他时间再替换

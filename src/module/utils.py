@@ -1,4 +1,3 @@
-
 import hashlib
 import os
 import platform
@@ -7,13 +6,17 @@ import re
 import socket
 import string
 from datetime import datetime
+from io import BytesIO, StringIO
 from pathlib import Path, PurePath
 from re import Pattern
 from typing import AnyStr, Type, TypeVar
 
 import distro as distro
 import psutil as psutil
+import qrcode
 import requests
+from PIL import Image
+from pyzbar.pyzbar import decode as pyzbar_decode
 from rich.progress import track
 
 from assets.os_type import OSType
@@ -220,6 +223,40 @@ def get_system_description() -> str:
         platform_system = distro.name(True)
         platform_version = ''
     return f'{platform_system} {platform_version} {platform.machine().strip()}'
+
+
+def print_qrcode(text: str) -> None:
+    """在控制台打印二维码"""
+    qr = qrcode.QRCode()
+    qr.add_data(text)
+    with StringIO() as out:
+        qr.print_ascii(out, invert=True)
+        print(out.getvalue())
+
+
+def decode_qrcode(file_data: bytes) -> str:
+    """二维码解码"""
+    with BytesIO() as bytes_io:
+        bytes_io.write(file_data)
+        with Image.open(bytes_io) as img:
+            return pyzbar_decode(img)[0].data.decode('utf-8')
+
+
+def get_random_free_port(min_: int = 10000, max_: int = 65535, default: int = None) -> int:
+    """获取一个随机空闲端口
+
+    :param min_: 最小端口号
+    :param max_: 最大端口号
+    :param default: 默认端口号
+    :return: 空闲端口号
+    """
+    if default and not is_port_in_use(default):
+        return default
+
+    result = random.randint(min_, max_)
+    while is_port_in_use(result):
+        result = random.randint(min_, max_)
+    return result
 
 
 if __name__ == '__main__':

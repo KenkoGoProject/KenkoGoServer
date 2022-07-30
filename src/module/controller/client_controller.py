@@ -30,7 +30,6 @@ class ClientController(APIRouter):
             'Authorization': 'Bearer 1231',  # 鉴权
             'Content-Type': 'application/json',
         })
-        self.base_url = 'http://127.0.0.1:35700'
         self.websocket_manager = Global().websocket_manager
 
         self.add_api_websocket_route('', self.client_websocket)
@@ -53,11 +52,12 @@ class ClientController(APIRouter):
 
     async def gocq_api_proxy(self, api_name: str, request: Request) -> dict:
         """go-cqhttp API转发"""
+        base_url = f'http://127.0.0.1:{Global().gocq_config.api_port}'
         body = await request.body()
         method = request.method
-        self.log.debug(f'{method:.4s} {self.base_url}/{api_name} {body[:200]} {self.r.headers}')
+        self.log.debug(f'{method:.4s} {base_url}/{api_name} {body[:200]} {self.r.headers}')
         try:
-            response = self.r.request(method, f'{self.base_url}/{api_name}', data=body)
+            response = self.r.request(method, f'{base_url}/{api_name}', data=body)
         except Exception as e:
             self.log.error(f'{e}')
             return HttpResult.error(f'{e}')

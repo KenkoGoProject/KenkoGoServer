@@ -1,6 +1,10 @@
+from fastapi import WebSocket
+from rich.table import Table
+
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
+from module.utils import decode_qrcode, print_qrcode
 
 HELP_TEXT = """支持的命令 Available commands:
 /help: 显示此帮助 Show this help message
@@ -10,11 +14,9 @@ HELP_TEXT = """支持的命令 Available commands:
 
 /start: 启动go-cqhttp Start go-cqhttp
 /stop: 停止go-cqhttp Stop go-cqhttp
-===Below are the commands working in progress===
 /qrcode: 显示登录二维码 Show qrcode of go-cqhttp
 
 /list：列出所有客户端 List all clients
-/kick: 踢出所有客户端 Kick all clients
 """
 
 
@@ -36,5 +38,28 @@ class CommandHandler(metaclass=SingletonType):
             Global().instance_manager.start()
         elif command == '/stop':
             Global().instance_manager.stop()
+        elif command in ['/qrcode', '/qr']:
+            try:
+                with Global().qrcode_path.open('rb') as f:
+                    qrcode = f.read()
+                code_url = decode_qrcode(qrcode)
+                print_qrcode(code_url)
+            except Exception as e:
+                self.log.error(e)
+        elif command in ['/list', '/ls', 'ls']:
+            self.list_clients()
         else:
             self.log.error('Invalid Command')
+
+    @staticmethod
+    def list_clients() -> None:
+        table = Table(title='客户端 Clients')
+        table.add_column('地址 Address', style='deep_sky_blue1')
+
+        websockets = Global().websocket_manager.active_connections
+        for websocket in websockets:
+            websocket: WebSocket = websocket[0]
+            client = websocket.client
+            table.add_row(f'{client.host}:{client.port}')
+
+        Global().console.print(table)

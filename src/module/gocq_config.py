@@ -2,6 +2,7 @@ from assets.default_config import DEFAULT_GOCQ_CONFIG, DEFAULT_MIDDLEWARE
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
+from module.utils import get_random_free_port
 from module.yaml_config import YamlConfig
 
 
@@ -15,6 +16,18 @@ class GocqConfig(metaclass=SingletonType):
         self.config = YamlConfig(Global().gocq_config_path)
         if not self.config.data:
             self.create_default_config()
+        self.api_port = self.get_api_port()
+
+    def get_api_port(self) -> int:
+        self.config.load()
+        data = self.config.data
+        try:
+            servers: list = data['servers']
+            address = servers[0]['http']['address']
+        except KeyError:
+            self.log.error('No http server configured')
+            return 35700
+        return int(address.split(':')[1])
 
     def create_default_config(self) -> None:
         """创建默认配置"""
@@ -27,8 +40,10 @@ class GocqConfig(metaclass=SingletonType):
         data = self.config.data
         servers: list = data['servers']
         servers.extend({} for _ in range(2 - len(servers)))
+
+        self.api_port = get_random_free_port(default=self.api_port)
         servers[0]['http'] = {
-            'address': '127.0.0.1:35700',
+            'address': f'127.0.0.1:{self.api_port}',
             'timeout': 5,
             'long-polling': {
                 'enabled': False,
