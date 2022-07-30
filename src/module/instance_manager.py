@@ -9,7 +9,7 @@ from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
 
 
-class GocqInstanceManager(metaclass=SingletonType):
+class InstanceManager(metaclass=SingletonType):
     """go-cqhttp 实例控制"""
 
     def __init__(self):
@@ -32,7 +32,7 @@ class GocqInstanceManager(metaclass=SingletonType):
 
         # 检查 go-cqhttp 是否存在
         if not Global().gocq_path.exists():
-            self.log.debug('gocq not found, try to download it.')
+            self.log.debug('go-cqhttp not found, try to download it.')
             try:
                 ok = Global().gocq_binary_manager.download_remote_version()
                 if not ok:
@@ -55,7 +55,7 @@ class GocqInstanceManager(metaclass=SingletonType):
         if not self.ready_to_start:
             self.log.warning('Instance not ready to start')
             return False
-        self.log.debug('Starting gocq...')
+        self.log.debug('Starting go-cqhttp...')
         self.process = subprocess.Popen(
             args=f'{Global().gocq_path} -faststart',
             cwd=Global().gocq_dir,
@@ -72,7 +72,7 @@ class GocqInstanceManager(metaclass=SingletonType):
         if not self.instance_started:
             self.log.warning('Instance not started')
             return False
-        self.log.debug('Stopping gocq...')
+        self.log.debug('Stopping go-cqhttp...')
         self.instance_started = False
         self.ready_to_start = False
         if self.process and self.process.poll() is None:

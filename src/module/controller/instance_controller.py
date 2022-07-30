@@ -42,7 +42,7 @@ class InstanceController(APIRouter):
                 Global().info_receive_from_gocq_count += 1
                 await self.websocket_manager.broadcast(s)
         except WebSocketDisconnect:
-            self.ws_log.info(f'Gocq connection closed: {client.host}:{client.port}')
+            self.ws_log.info(f'go-cqhttp connection closed: {client.host}:{client.port}')
         except Exception as e:
             self.ws_log.error(f'{client} : {e}')
 

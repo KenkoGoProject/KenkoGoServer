@@ -32,6 +32,7 @@ class Main:
             exit_on_error=False,  # 发生错误时不退出
         )
         parser.add_argument('-h', '--help', action='store_true', help='Show this help message and exit')
+        parser.add_argument('-a', '--auto-start', action='store_true', help='Auto start go-cqhttp')
         parser.add_argument('-d', '--debug', action='store_true', help='Debug mode')
         parser.add_argument('-c', '--config', help='Config file path', default='config.yaml')
         args_known, args_unknown = parser.parse_known_args()
@@ -41,6 +42,7 @@ class Main:
             parser.print_help()
             sys.exit(0)
 
+        Global().auto_start = args_known.auto_start
         Global().debug_mode = args_known.debug or Global().debug_mode  # 开启调试模式
 
         # 创建日志打印器

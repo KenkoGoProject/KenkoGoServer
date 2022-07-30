@@ -58,6 +58,10 @@ class HttpServer(FastAPI, metaclass=SingletonType):
         self.log.info(f'{Global().app_name} started at '
                       f'http://{Global().user_config.host}:{Global().user_config.port} .')
         self.log.info('Try in https://kenkogo.akagiyui.com')
+        time.sleep(5)
+        if Global().auto_start:
+            self.log.debug('Auto start instance.')
+            Global().instance_manager.start()
 
     async def server_shutdown(self) -> None:
         """事件 服务关闭"""

@@ -4,8 +4,8 @@ from module.exception_ex import PortInUseError
 from module.global_dict import Global
 from module.gocq_binary_manager import GocqBinaryManager
 from module.gocq_config import GocqConfig
-from module.gocq_instance_manager import GocqInstanceManager
 from module.http_server import HttpServer
+from module.instance_manager import InstanceManager
 from module.logger_ex import LoggerEx, LogLevel
 from module.thread_ex import ThreadEx
 from module.utils import is_port_in_use
@@ -22,7 +22,7 @@ class KenkoGo:
         # 一定要严格按照顺序初始化，否则可能会出现异常
         Global().gocq_config = GocqConfig()
         Global().websocket_manager = WebsocketManager()
-        Global().instance_manager = GocqInstanceManager()
+        Global().instance_manager = InstanceManager()
         Global().gocq_binary_manager = GocqBinaryManager()
         self.http_app = HttpServer()
         self.http_thread = None

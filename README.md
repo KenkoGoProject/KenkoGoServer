@@ -20,21 +20,47 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
 这是一个 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp) 守护程序
 
-用来管理一个~~或多个~~ go-cqhttp 进程，监听并转发事件。
+用来管理一个 go-cqhttp 进程，监听并转发事件。
 ~~提供`掉线重连`,`风控提示`等功能。~~
 
 ## 快速开始 Quick Start
 
-1. 在 [release](https://github.com/AkagiYui/KenkoGoServer/releases) 下载最新版本
+请确保你的机器有 **Python 3.9.13** 的环境，其他版本未经测试。
+
+1. 部署运行环境
 
 ```shell
-chmod +x ./kenkogo
-./kenkogo --debug
+git clone https://github.com/AkagiYui/KenkoGoServer
+cd ./KenkoGoServer
+python -m venv venv
+./venv/Scripts/activate
+python -m pip install -r ./requirements.txt
+```
+
+2. 修改配置文件
+
+你也可以跳过这一步， KenkoGo 将会自动生成一个配置文件。
+
+```shell
+cd ./src
+cp config.yaml.bak config.yaml
+```
+
+3. 启动脚本
+
+```shell
+python ./main.py --debug
 ```
 
 > 命令行参数说明
 > 
-> --debug: 开启调试模式，将输出更多信息
+> -h --help: 显示帮助信息
+> 
+> -a --auto-start: 自动启动 go-cqhttp
+> 
+> -d --debug: 开启调试模式，将输出更多信息
+> 
+> -c --config: 指定配置文件路径
 
 当控制台提示`KenkoGo Started`时，可输入`/help`查看可用的指令。
 
@@ -62,17 +88,17 @@ chmod +x ./kenkogo
 
 Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/downloads/release/python-3913/)
 
-~~构建工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)~~
-
-~~数据库: [SQLite](https://www.sqlite.org/index.html)~~
-
-自动构建: [GitHub Actions](https://https://docs.github.com/cn/actions)
-
 依赖表生成工具: [pip-tools 6.8.0](https://github.com/jazzband/pip-tools/)
 
 导入排序工具: [isort 5.10.1](https://pycqa.github.io/isort/)
 
 代码格式化工具: [flake8 4.0.1](https://flake8.readthedocs.io/en/latest/) [mypy 0.971](https://mypy.readthedocs.io/en/latest/)
+
+~~构建工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)~~
+
+~~数据库: [SQLite](https://www.sqlite.org/index.html)~~
+
+~~自动构建: [GitHub Actions](https://https://docs.github.com/cn/actions)~~
 
 ### 运行时Python包  Runtime Python Package
 
@@ -102,33 +128,6 @@ Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/
 - [ ] 集成 [retrying](https://github.com/rholder/retrying)
 
 ## 从代码开始 Start from Code
-
-### 运行 Start
-
-请确保你的机器有 **Python 3.9.13** 的环境，其他版本未经测试。
-
-1. 部署运行环境
-
-```shell
-git clone https://github.com/AkagiYui/KenkoGoServer
-cd ./KenkoGoServer
-python -m venv venv
-./venv/Scripts/activate
-python -m pip install -r ./requirements.txt
-```
-
-2. 修改配置文件
-
-```shell
-cd ./src
-cp config.yaml.bak config.yaml
-```
-
-3. 启动脚本
-
-```shell
-python ./main.py --debug
-```
 
 ### 代码检查 Code Lint
 

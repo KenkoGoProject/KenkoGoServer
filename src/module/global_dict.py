@@ -22,8 +22,8 @@ class Global(metaclass=SingletonType):
 
     app_name = 'KenkoGo'  # 应用名称
     author_name = 'AkagiYui'  # 作者
-    version_num = 12  # 版本号
-    version_str = '0.2.1'  # 版本名称
+    version_num = 13  # 版本号
+    version_str = '0.2.2'  # 版本名称
     description = 'A Controller of go-cqhttp'  # 描述
 
     ############
@@ -33,6 +33,7 @@ class Global(metaclass=SingletonType):
     exit_code = 0  # 退出码
     time_to_exit = False  # 是时候退出了
     debug_mode = False  # 调试模式
+    auto_start = False  # 自动启动实例
 
     info_receive_from_gocq_count = 0  # 接收到的信息数量
 
