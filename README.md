@@ -35,6 +35,7 @@ cd ./KenkoGoServer
 python -m venv venv
 ./venv/Scripts/activate
 python -m pip install -r ./requirements.txt
+cd ./src
 ```
 
 2. 修改配置文件
@@ -42,7 +43,6 @@ python -m pip install -r ./requirements.txt
 你也可以跳过这一步， KenkoGo 将会自动生成一个配置文件。
 
 ```shell
-cd ./src
 cp config.yaml.bak config.yaml
 ```
 
@@ -62,8 +62,13 @@ python ./main.py --debug
 > 
 > -c --config: 指定配置文件路径
 
-当控制台提示`KenkoGo Started`时，可输入`/help`查看可用的指令。
+4. 客户端连接
 
+当控制台提示`KenkoGo Started at xxx`时，可输入`/help`查看可用的指令。
+
+或者使用 [KenkoGoClient](https://github.com/AkagiYui/KenkoGoClient) 连接 KenkoGo。
+
+还有一种可用但不推荐的方法是使用`/start`指令来启动 go-cqhttp 实例。
 
 ## 更新日志 [Changelog](Changelog.md)
 

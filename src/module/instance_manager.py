@@ -1,12 +1,15 @@
 import re
 import subprocess
-import threading
+import time
 from typing import Union
 
+from assets.server_event import ServerEvent
 from module.exception_ex import DownloadError
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
+from module.thread_ex import ThreadEx
+from module.utils import decode_qrcode, print_qrcode
 
 
 class InstanceManager(metaclass=SingletonType):
@@ -24,7 +27,7 @@ class InstanceManager(metaclass=SingletonType):
         self.ready_to_start = False  # 实例是否准备好启动
 
         self.process: Union[subprocess.Popen, None] = None  # go-cqhttp 实例进程
-        self.thread_read_output: Union[threading.Thread, None] = None  # 控制台输出检查线程
+        self.thread_read_output: Union[ThreadEx, None] = None  # 控制台输出检查线程
         self.websocket_manager = Global().websocket_manager
 
     def check(self) -> None:
@@ -32,7 +35,7 @@ class InstanceManager(metaclass=SingletonType):
 
         # 检查 go-cqhttp 是否存在
         if not Global().gocq_path.exists():
-            self.log.debug('go-cqhttp not found, try to download it.')
+            self.log.warning('go-cqhttp not found, try to download it.')
             try:
                 ok = Global().gocq_binary_manager.download_remote_version()
                 if not ok:
@@ -64,7 +67,7 @@ class InstanceManager(metaclass=SingletonType):
             encoding='utf-8'
         )
         self.instance_started = True
-        self.thread_read_output = threading.Thread(target=self._read_output)
+        self.thread_read_output = ThreadEx(target=self._read_output)
         self.thread_read_output.start()
         return True
 
@@ -82,10 +85,15 @@ class InstanceManager(metaclass=SingletonType):
                 self.log.error('gocq is still running, force to kill it.')
                 self.process.kill()
         if self.thread_read_output:
-            self.thread_read_output.join()
+            self.thread_read_output.kill()
         self.process = None
         self.thread_read_output = None
         return True
+
+    def restart(self):
+        self.stop()
+        time.sleep(0.5)
+        self.start()
 
     def _read_output(self) -> None:
         """控制台输出检查线程"""
@@ -115,14 +123,18 @@ class InstanceManager(metaclass=SingletonType):
                 continue
 
             self.proc_log.debug(text_output)
-            self.handle_output(text_output)
+            if self.handle_output(text_output):
+                break
         self.instance_started = False
 
-    def handle_output(self, text_output: str):
-        """处理控制台输出"""
-        # TODO: 补充情况
+    def handle_output(self, text_output: str) -> bool:
+        """处理控制台输出
+
+        :param text_output: 控制台输出
+        :return: 是否退出线程
+        """
         if text_output.startswith('请使用手机QQ扫描二维码 (qrcode.png)'):
-            self.log.info(f'等待扫描二维码 http://{Global().host_with_port}/instance/qrcode')
+            self.on_need_scan()
         elif text_output.startswith('上报 Event 数据'):
             ...
         elif text_output.startswith('开始尝试登录并同步消息'):
@@ -140,65 +152,88 @@ class InstanceManager(metaclass=SingletonType):
         elif text_output.startswith('账号密码未配置, 将使用二维码登录'):
             ...
         elif text_output.startswith('扫码成功, 请在手机端确认登录.'):
-            ...
+            self.log.info('Scan success. Please confirm in your phone.')
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('scan_success'))
         elif text_output.startswith('恢复会话失败: Packet timed out , 尝试使用正常流程登录'):
             ...
         elif text_output.startswith('Bot 账号在客户端'):
             ...
         elif text_output.startswith('Protocol -> '):
             text_output = text_output.removeprefix('Protocol -> ')
-            if text_output.startswith('unexpected disconnect: '):
+            if text_output.startswith('connect to server'):
+                return False
+            elif text_output.startswith('unexpected disconnect: '):
                 text_output = text_output.removeprefix('unexpected disconnect: ')
                 self.log.warning(f'预期外的断线: {text_output}')
             elif text_output.startswith('register client failed: Packet timed out'):
                 self.log.warning('注册客户端失败: 数据包超时')
             elif text_output.startswith('connect server error: dial tcp error: '):
                 self.log.warning('服务器连接失败')
-            elif text_output.startswith('connect to server'):
-                ...
             elif text_output.startswith('resolve long message server error'):
                 self.log.warning('长消息服务器延迟测试失败')
             elif text_output.startswith('test long message server response latency error'):
                 self.log.warning('长消息服务器响应延迟测试失败')
             elif text_output.startswith('device lock is disable.'):
                 self.log.warning('设备锁未启用, http api可能失败')
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event(f'protocol: {text_output}'))
         elif text_output.startswith('Bot已离线: '):
-            text_output = text_output.removeprefix('Bot已离线: ')
-            self.log.warning(f'Bot已离线: {text_output}')
+            self.log.warning(text_output)
         elif text_output.startswith('扫码登录无法恢复会话'):
             self.log.warning('快速重连失败，扫码登录无法恢复会话，go-cqhttp将重启')
-            # 重启
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('fail_reconnect'))
+            self.restart()
+            return True
         elif text_output.startswith('登录时发生致命错误: '):
             text_output = text_output.removeprefix('登录时发生致命错误: ')
             if text_output.startswith('fetch qrcode error: Packet timed out'):
                 self.log.warning('二维码获取失败，等待重新生成二维码')
             elif text_output.startswith('not found error correction level and mask'):
-                # 重启
                 ...
             else:
                 self.log.warning(text_output)
-                # 重启
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event(f'login_error: {text_output}'))
+            self.restart()
+            return True
         elif text_output.startswith('扫码被用户取消.'):
-            # 重启
-            ...
+            self.log.warning('二维码登录被取消')
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('scan_cancel'))
+            self.restart()
+            return True
         elif text_output.startswith('二维码过期'):
             self.log.warning('二维码已过期，等待重新生成二维码')
-            # 重启
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('qrcode_expired'))
+            self.restart()
+            return True
         elif text_output.startswith('登录成功 欢迎使用:'):
-            self.log.info('已登录，正在等待消息上报')
+            self.log.info('登录成功，正在等待消息上报')
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('login_success'))
         elif text_output.startswith('检查更新失败: '):
             text_output = text_output.removeprefix('检查更新失败: ')
             # Get "https://api.github.com/repos/Mrs4s/go-cqhttp/releases/latest"
             # : dial tcp: lookup api.github.com: no such host
-            self.log.warning(f'检查更新失败，请检查github访问是否通畅。{text_output}')
+            self.log.warning(f'检查更新失败，请检查github访问是否通畅。 {text_output}')
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event(f'check_update_fail: {text_output}'))
         elif text_output.startswith('快速重连失败'):
             text_output = text_output.removeprefix('快速重连失败').strip()
             if text_output.startswith(', 扫码登录无法恢复会话.'):
                 self.log.warning('重连失败，go-cqhttp将重启')
-                # 重启
+                self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('fail_reconnect'))
+                self.restart()
+                return True
         elif text_output.startswith('群消息发送失败: '):
-            text_output = text_output.removeprefix('群消息发送失败: ')
-            self.log.warning(f'群消息发送失败: {text_output}')
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('failed to send group message'))
+            self.log.warning(text_output)
         elif text_output.startswith('频道消息发送失败: '):
-            text_output = text_output.removeprefix('频道消息发送失败: ')
-            self.log.warning(f'频道消息发送失败: {text_output}')
+            self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('failed to send channel message'))
+            self.log.warning(text_output)
+
+    def on_need_scan(self) -> None:
+        self.log.info(f'等待扫描二维码 http://{Global().host_with_port}/instance/qrcode')
+        self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('need_scan'))
+        try:
+            with Global().qrcode_path.open('rb') as f:
+                qrcode = f.read()
+            code_url = decode_qrcode(qrcode)
+            print_qrcode(code_url)
+        except Exception as e:
+            self.log.error(e)

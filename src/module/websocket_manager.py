@@ -62,14 +62,14 @@ class WebsocketManager(metaclass=SingletonType):
         for connection in self.active_connections:
             await self.send_message(connection, message)
 
-    # def broadcast_sync(self, message: Union[str, bytes, dict]):
-    #     try:
-    #         loop = asyncio.get_running_loop()
-    #         loop = loop.create_task
-    #     except RuntimeError:
-    #         loop = asyncio.new_event_loop()
-    #         loop = loop.run_until_complete
-    #     loop(self.broadcast(message))
+    def broadcast_sync(self, message: Union[str, bytes, dict]):
+        try:
+            loop = asyncio.get_running_loop()
+            loop = loop.create_task
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            loop = loop.run_until_complete
+        loop(self.broadcast(message))
 
     def close_all(self):  # 未实现
         loop = asyncio.new_event_loop()
