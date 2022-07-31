@@ -21,6 +21,7 @@ class Main:
         if sign in (signal.SIGINT, signal.SIGTERM):
             self.log.debug(f'Received signal {sign}, Application exits.')
             Global().time_to_exit = True
+            raise KeyboardInterrupt
 
     def __init__(self):
         Global().console = Console()  # 初始化控制台对象

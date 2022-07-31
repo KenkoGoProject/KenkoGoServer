@@ -65,7 +65,7 @@ class HttpServer(FastAPI, metaclass=SingletonType):
 
     async def server_shutdown(self) -> None:
         """事件 服务关闭"""
-        self.log.warning('HttpServer shutdown.')
+        self.log.debug('HttpServer shutdown.')
 
     async def http_middleware(self, request: Request, call_next) -> JSONResponse:
         """请求中间件"""
