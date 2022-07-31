@@ -71,7 +71,11 @@ class GocqBinaryManager(metaclass=SingletonType):
                         self.log.debug(f'Url {asset.browser_download_url}')
                         file_path = Path(Global().download_dir, 'gocq.compression')
                         try:
-                            download_file(asset.browser_download_url, str(file_path))
+                            download_url = asset.browser_download_url
+                            proxy = Global().user_config.github_proxy
+                            if proxy == 'ghproxy.com':
+                                download_url = f'https://ghproxy.com/{download_url}'
+                            download_file(download_url, str(file_path))
                         except Exception as e:
                             self.log.error(f'Download failed: {e}')
                             return False

@@ -239,7 +239,11 @@ def decode_qrcode(file_data: bytes) -> str:
     with BytesIO() as bytes_io:
         bytes_io.write(file_data)
         with Image.open(bytes_io) as img:
-            return pyzbar_decode(img)[0].data.decode('utf-8')
+            a = pyzbar_decode(img)
+            b = a[0]
+            c = b.data
+            d = c.decode('utf-8')
+            return d
 
 
 def get_random_free_port(min_: int = 10000, max_: int = 65535, default: int = None) -> int:

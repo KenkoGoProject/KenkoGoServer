@@ -11,19 +11,20 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 [KenkoGoServer](https://github.com/AkagiYui/KenkoGoServer)不同于以前的[KenkoGo](https://github.com/AkagiYui/KenkoGo)，
 该项目是一个RestfulAPI的程序，请通过HTTP请求来控制，当该项目进入稳定状态后，`KenkoGo`将被删除。
 
-[该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现后端服务，
-前端服务请前往 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui)，
-或使用 [KenkoGoClient](https://github.com/AkagiYui/KenkoGoClient)
+[该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现守护服务，
+功能实现请使用 [KenkoGoClient](https://github.com/AkagiYui/KenkoGoClient)，
+或使用 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui) 查看数据。
 
 
 ## 功能介绍 Introduction
 
 这是一个 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp) 守护程序
 
-用来管理一个 go-cqhttp 进程，监听并转发事件。
-~~提供`掉线重连`,`风控提示`等功能。~~
+用来管理一个 go-cqhttp 进程，监听并转发事件，~~提供`掉线重连`,`风控提示`等功能。~~
 
 ## 快速开始 Quick Start
+
+### Windows 10 PowerShell
 
 请确保你的机器有 **Python 3.9.13** 的环境，其他版本未经测试。
 
@@ -46,11 +47,47 @@ cd ./src
 cp config.yaml.bak config.yaml
 ```
 
+> 配置项说明
+> 
+> host: 监听地址，默认为 0.0.0.0，即监听所有地址。
+> 
+> post: 监听端口，默认为 18082。
+> 
+> github_proxy: GitHub 代理地址，暂时仅用于下载 go-cqhttp，目前仅支持 `ghproxy.com`，留空表示不使用代理。
+
 3. 启动脚本
 
 ```shell
 python ./main.py --debug
 ```
+
+### Linux Debian 11
+
+请确保你的机器有 **Python 3.9.13** 的环境，其他版本未经测试。
+
+1. 部署运行环境
+
+```shell
+git clone https://github.com/AkagiYui/KenkoGoServer
+cd ./KenkoGoServer
+python3 -m venv venv
+source ./venv/bin/activate
+
+apt install libzbar0
+python -m pip install -r ./requirements.txt
+
+cd ./src
+```
+
+2. 修改配置文件
+
+你也可以跳过这一步， KenkoGo 将会自动生成一个配置文件。
+
+```shell
+cp config.yaml.bak config.yaml
+```
+
+
 
 > 命令行参数说明
 > 
@@ -115,6 +152,7 @@ python ./main.py --debug
 
 ### 待办事项 Todo
 
+- [ ] 自动修改标题含 QQ 昵称
 - [ ] 记录客户端登入时间戳
 - [ ] 获取上传的文件列表
 - [ ] 定时删除过期的文件
@@ -138,5 +176,5 @@ python ./code_lint.py
 
 ```shell
 python -m pip install -r ./requirements-build.txt
-python ./build.py
+python ./build_binary.py
 ```

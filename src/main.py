@@ -2,6 +2,7 @@ import argparse
 import contextlib
 import signal
 import sys
+from pathlib import Path
 
 from rich.traceback import install as install_rich_traceback
 
@@ -76,13 +77,15 @@ class Main:
         while not Global().time_to_exit:
             try:
                 command = Global().console.input('> ')  # 获取用户输入
+                command = command.strip()
             except (UnicodeDecodeError, EOFError, KeyboardInterrupt):
                 if Global().time_to_exit:
                     break  # 退出
                 else:
                     self.log.error('Invalid Command')  # 输入的命令无效
             else:
-                Global().command_handler.add(command)
+                if command:
+                    Global().command_handler.add(command)
 
         # 退出程序
         from kenko_go import KenkoGo
@@ -96,7 +99,8 @@ if __name__ == '__main__':
     # Windows下修改控制台窗口标题
     with contextlib.suppress(Exception):
         import ctypes
-        ctypes.windll.kernel32.SetConsoleTitleW(f'{Global().app_name} {Global().version_str}')
+        new_title = f'{Global().app_name}({Global().version_str}) {Path.cwd()}'
+        ctypes.windll.kernel32.SetConsoleTitleW(new_title)
 
     # 让PyCharm调试输出的信息换行
     if sys.gettrace() is not None:

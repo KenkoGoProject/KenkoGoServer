@@ -97,8 +97,11 @@ class InstanceManager(metaclass=SingletonType):
 
     def _read_output(self) -> None:
         """控制台输出检查线程"""
-        while self.process.poll() is None:
-            output_list = self.process.stdout.readlines(1)
+        while self.process and self.process.poll() is None:
+            # output_list = self.process.stderr.readlines(1)
+            output_list = []
+            if not output_list:
+                output_list = self.process.stdout.readlines(1)
             if not output_list:
                 continue
             text_output: str = output_list[0]
@@ -236,4 +239,4 @@ class InstanceManager(metaclass=SingletonType):
             code_url = decode_qrcode(qrcode)
             print_qrcode(code_url)
         except Exception as e:
-            self.log.error(e)
+            self.log.exception(e)

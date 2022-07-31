@@ -1,2 +1,3 @@
 host: "0.0.0.0"  # HTTP服务器监听地址
 port: 18082  # HTTP服务器端口
+github_proxy: "ghproxy.com"  # GitHub代理服务器，目前仅支持 ghproxy.com，留空则不使用代理服务器
