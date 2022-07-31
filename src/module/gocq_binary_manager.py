@@ -4,7 +4,6 @@ from pathlib import Path
 
 import requests
 
-from assets.os_type import OSType
 from assets.release import Asset, Release
 from module.exception_ex import ReleaseNotFoundError
 from module.global_dict import Global
@@ -99,18 +98,15 @@ class GocqBinaryManager(metaclass=SingletonType):
 
         self.log.debug('Decompressing gocq.compression...')
         Global().gocq_dir.mkdir(parents=True, exist_ok=True)
-        os_type = get_os_type()
-        if os_type in [OSType.WINDOWS_AMD64, OSType.WINDOWS_I386]:
+        if Global().is_windows:
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
                 if Global().gocq_binary_name not in zip_ref.namelist():
                     raise FileNotFoundError(f'{Global().gocq_binary_name} not found.')
                 zip_ref.extract(Global().gocq_binary_name, Global().gocq_dir)
-        elif os_type in [OSType.LINUX_AMD64, OSType.LINUX_I386]:
+        else:
             with tarfile.open(file_path, 'r:gz') as tar_ref:
                 if Global().gocq_binary_name not in tar_ref.getnames():
                     raise FileNotFoundError(f'{Global().gocq_binary_name} not found.')
                 tar_ref.extract(Global().gocq_binary_name, Global().gocq_dir)
-        else:
-            raise NotImplementedError(f'{os_type} not supported.')
 
     # TODO: 删除等操作

@@ -59,12 +59,16 @@ class InstanceManager(metaclass=SingletonType):
             self.log.warning('Instance not ready to start')
             return False
         self.log.debug('Starting go-cqhttp...')
+        if Global().is_windows:
+            exec_path = Global().gocq_path
+        else:
+            exec_path = f'./{Global().gocq_binary_name}'
         self.process = subprocess.Popen(
-            args=f'{Global().gocq_path} -faststart',
+            args=[exec_path, '-faststart'],
             cwd=Global().gocq_dir,
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            encoding='utf-8'
+            stderr=subprocess.STDOUT,
+            encoding='utf-8',
         )
         self.instance_started = True
         self.thread_read_output = ThreadEx(target=self._read_output)
@@ -98,10 +102,7 @@ class InstanceManager(metaclass=SingletonType):
     def _read_output(self) -> None:
         """控制台输出检查线程"""
         while self.process and self.process.poll() is None:
-            # output_list = self.process.stderr.readlines(1)
-            output_list = []
-            if not output_list:
-                output_list = self.process.stdout.readlines(1)
+            output_list = self.process.stdout.readlines(1)
             if not output_list:
                 continue
             text_output: str = output_list[0]
@@ -111,14 +112,17 @@ class InstanceManager(metaclass=SingletonType):
             color_regex = re.compile(r'\x1b\[\d+(;\d+)?m')
             match_result = re.match(color_regex, text_output)
             if not match_result:
+                self.proc_log.debug(text_output)
                 continue
             text_output = re.sub(color_regex, '', text_output).strip()
 
             # 删除日期与日志等级
             match_result = re.match(r'\[\d+-\d+-\d+ \d+:\d+:\d+] \[[A-Z]+\]: ', text_output)
             if not match_result:
+                self.proc_log.debug(text_output)
                 continue
             if match_result.end() == len(text_output):
+                self.proc_log.debug(text_output)
                 continue
             text_output = text_output[match_result.end():].strip()
 

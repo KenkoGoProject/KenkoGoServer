@@ -30,7 +30,7 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
 1. 部署运行环境
 
-```shell
+```ps
 git clone https://github.com/AkagiYui/KenkoGoServer
 cd ./KenkoGoServer
 python -m venv venv
@@ -43,7 +43,7 @@ cd ./src
 
 你也可以跳过这一步， KenkoGo 将会自动生成一个配置文件。
 
-```shell
+```ps
 cp config.yaml.bak config.yaml
 ```
 
@@ -57,9 +57,27 @@ cp config.yaml.bak config.yaml
 
 3. 启动脚本
 
-```shell
+```ps
 python ./main.py --debug
 ```
+
+> 命令行参数说明
+> 
+> -h --help: 显示帮助信息
+> 
+> -a --auto-start: 自动启动 go-cqhttp
+> 
+> -d --debug: 开启调试模式，将输出更多信息
+> 
+> -c --config: 指定配置文件路径
+
+4. 客户端连接
+
+当控制台提示`KenkoGo Started at xxx`时，可输入`/help`查看可用的指令。
+
+或者使用 [**KenkoGoClient**](https://github.com/AkagiYui/KenkoGoClient) 连接 KenkoGo。
+
+还有一种可用但不推荐的方法是使用`/start`指令来启动 go-cqhttp 实例。
 
 ### Linux Debian 11
 
@@ -87,17 +105,11 @@ cd ./src
 cp config.yaml.bak config.yaml
 ```
 
+3. 启动脚本
 
-
-> 命令行参数说明
-> 
-> -h --help: 显示帮助信息
-> 
-> -a --auto-start: 自动启动 go-cqhttp
-> 
-> -d --debug: 开启调试模式，将输出更多信息
-> 
-> -c --config: 指定配置文件路径
+```ps
+python ./main.py --debug
+```
 
 4. 客户端连接
 
@@ -106,6 +118,7 @@ cp config.yaml.bak config.yaml
 或者使用 [KenkoGoClient](https://github.com/AkagiYui/KenkoGoClient) 连接 KenkoGo。
 
 还有一种可用但不推荐的方法是使用`/start`指令来启动 go-cqhttp 实例。
+
 
 ## 更新日志 [Changelog](Changelog.md)
 
@@ -177,4 +190,10 @@ python ./code_lint.py
 ```shell
 python -m pip install -r ./requirements-build.txt
 python ./build_binary.py
+```
+
+### 构建 Docker Image
+
+```shell
+docker build -t kenkogo-server .
 ```

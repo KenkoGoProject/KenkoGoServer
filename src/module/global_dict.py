@@ -98,8 +98,10 @@ class Global(metaclass=SingletonType):
 
         os_type = get_os_type()
         if os_type in [OSType.WINDOWS_AMD64, OSType.WINDOWS_I386]:
+            self.is_windows = True
             self.gocq_binary_name = 'go-cqhttp.exe'  # Windows go-cqhttp 二进制文件名
         elif os_type in [OSType.LINUX_AMD64, OSType.LINUX_I386]:
+            self.is_windows = False
             self.gocq_binary_name = 'go-cqhttp'  # Linux go-cqhttp 二进制文件名
         else:
             raise TypeError(f'Unsupported OS type: {os_type}')
