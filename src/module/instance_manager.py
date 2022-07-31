@@ -82,10 +82,10 @@ class InstanceManager(metaclass=SingletonType):
             self.process.terminate()
             self.process.wait(2)
             if self.process.poll() is None:
-                self.log.error('gocq is still running, force to kill it.')
+                self.log.error('go-cqhttp is still running, force to kill it.')
                 self.process.kill()
         if self.thread_read_output:
-            self.thread_read_output.kill()
+            ...
         self.process = None
         self.thread_read_output = None
         return True

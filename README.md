@@ -85,25 +85,18 @@ python ./main.py --debug
 
 ## 开发相关 Development
 
-操作系统：[Windows 10 19044.1586](https://www.microsoft.com/zh-cn/windows)
-
-系统架构：amd64
+- 操作系统：[Windows 10 19044.1586](https://www.microsoft.com/zh-cn/windows)
+- 系统架构：amd64
 
 ### 使用技术 Technology Stack
 
-Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/downloads/release/python-3913/)
-
-依赖表生成工具: [pip-tools 6.8.0](https://github.com/jazzband/pip-tools/)
-
-导入排序工具: [isort 5.10.1](https://pycqa.github.io/isort/)
-
-代码格式化工具: [flake8 4.0.1](https://flake8.readthedocs.io/en/latest/) [mypy 0.971](https://mypy.readthedocs.io/en/latest/)
-
-~~构建工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)~~
-
-~~数据库: [SQLite](https://www.sqlite.org/index.html)~~
-
-~~自动构建: [GitHub Actions](https://https://docs.github.com/cn/actions)~~
+- Python: [3.9.13](https://www.python.org/) [下载地址](https://www.python.org/downloads/release/python-3913/)
+- 依赖表生成工具: [pip-tools 6.8.0](https://github.com/jazzband/pip-tools/)
+- 导入排序工具: [isort 5.10.1](https://pycqa.github.io/isort/)
+- 代码格式化工具: [flake8 4.0.1](https://flake8.readthedocs.io/en/latest/) [mypy 0.971](https://mypy.readthedocs.io/en/latest/)
+- ~~构建工具: [Nuitka](https://nuitka.net/) [下载地址](https://nuitka.net/doc/download.html)~~
+- ~~数据库: [SQLite](https://www.sqlite.org/index.html)~~
+- ~~自动构建: [GitHub Actions](https://https://docs.github.com/cn/actions)~~
 
 ### 运行时Python包  Runtime Python Package
 
