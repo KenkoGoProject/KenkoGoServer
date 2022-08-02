@@ -16,7 +16,7 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 或使用 [kenkogo-webui](https://github.com/KenkoGoProject/kenkogo-webui) 查看数据。
 
 
-## 功能介绍 Introduction
+## 功能介绍 Introduction 
 
 这是一个 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp) 守护程序
 
