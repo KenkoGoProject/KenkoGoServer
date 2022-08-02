@@ -1,26 +1,33 @@
 # KenkoGoServer
 
 ![Python Version](https://img.shields.io/badge/python-3.9.13-blue)
-![License](https://img.shields.io/github/license/AkagiYui/KenkoGoServer)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AkagiYui/KenkoGoServer)
-![lines](https://img.shields.io/tokei/lines/github/AkagiYui/KenkoGoServer)
-[![OSCS Status](https://www.oscs1024.com/platform/badge/AkagiYui/KenkoGoServer.git.svg)](https://www.murphysec.com/dr/nz85l1OmneIOz3uzYE)
+![License](https://img.shields.io/github/license/KenkoGoProject/KenkoGoServer)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/KenkoGoProject/KenkoGoServer)
+![lines](https://img.shields.io/tokei/lines/github/KenkoGoProject/KenkoGoServer)
+[![OSCS Status](https://www.oscs1024.com/platform/badge/KenkoGoProject/KenkoGoServer.git.svg)](https://www.murphysec.com/dr/nz85l1OmneIOz3uzYE)
 
 A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
-[KenkoGoServer](https://github.com/AkagiYui/KenkoGoServer)不同于以前的[KenkoGo](https://github.com/AkagiYui/KenkoGo)，
+注意：[KenkoGoServer](https://github.com/KenkoGoProject/KenkoGoServer)不同于以前的[KenkoGo](https://github.com/AkagiYui/KenkoGoOld)，
 该项目是一个RestfulAPI的程序，请通过HTTP请求来控制，当该项目进入稳定状态后，`KenkoGo`将被删除。
 
-[该仓库](https://github.com/AkagiYui/KenkoGoServer) 仅实现守护服务，
-功能实现请使用 [KenkoGoClient](https://github.com/AkagiYui/KenkoGoClient)，
-或使用 [kenkogo-webui](https://github.com/AkagiYui/kenkogo-webui) 查看数据。
+[该仓库](https://github.com/KenkoGoProject/KenkoGoServer) 仅实现守护服务，
+功能实现请使用 [KenkoGoClient](https://github.com/KenkoGoProject/KenkoGoClient)，
+或使用 [kenkogo-webui](https://github.com/KenkoGoProject/kenkogo-webui) 查看数据。
 
 
 ## 功能介绍 Introduction
 
 这是一个 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp) 守护程序
 
-用来管理一个 go-cqhttp 进程，监听并转发事件，~~提供`掉线重连`,`风控提示`等功能。~~
+用来管理一个 go-cqhttp 进程，监听并转发事件。
+
+- [x] go-cqhttp 消息转发
+- [x] 自动下载最新 go-cqhttp 二进制文件
+- [x] 为客户端提供 go-cqhttp 状态变化事件
+- [ ] 掉线重连（已添加，未测试）
+- [ ] 风控提示（已添加，未测试）
+- [ ] 与 NoneBot2 的驱动对接
 
 ## 快速开始 Quick Start
 
@@ -31,7 +38,7 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 1. 部署运行环境
 
 ```ps
-git clone https://github.com/AkagiYui/KenkoGoServer
+git clone https://github.com/KenkoGoProject/KenkoGoServer
 cd ./KenkoGoServer
 python -m venv venv
 ./venv/Scripts/activate
@@ -75,7 +82,7 @@ python ./main.py --debug
 
 当控制台提示`KenkoGo Started at xxx`时，可输入`/help`查看可用的指令。
 
-或者使用 [**KenkoGoClient**](https://github.com/AkagiYui/KenkoGoClient) 连接 KenkoGo。
+或者使用 [**KenkoGoClient**](https://github.com/KenkoGoProject/KenkoGoClient) 连接 KenkoGo。
 
 还有一种可用但不推荐的方法是使用`/start`指令来启动 go-cqhttp 实例。
 
@@ -115,7 +122,7 @@ python ./main.py --debug
 
 当控制台提示`KenkoGo Started at xxx`时，可输入`/help`查看可用的指令。
 
-或者使用 [KenkoGoClient](https://github.com/AkagiYui/KenkoGoClient) 连接 KenkoGo。
+或者使用 [KenkoGoClient](https://github.com/KenkoGoProject/KenkoGoClient) 连接 KenkoGo。
 
 还有一种可用但不推荐的方法是使用`/start`指令来启动 go-cqhttp 实例。
 
@@ -166,15 +173,11 @@ python ./main.py --debug
 ### 待办事项 Todo
 
 - [ ] 自动修改标题含 QQ 昵称
+- [ ] 编写 Nuitka 脚本
 - [ ] 记录客户端登入时间戳
 - [ ] 获取上传的文件列表
 - [ ] 定时删除过期的文件
 - [ ] 实例运行时允许先下载其他版本，其他时间再替换
-- [ ] 编写 Nuitka 脚本
-- [ ] 集成 [pydis](https://github.com/Zombie123456/pydis)
-- [ ] 为 NoneBot2 的驱动提供接口
-- [ ] 集成 [Socket.IO](https://github.com/miguelgrinberg/python-socketio)
-- [ ] 集成 [retrying](https://github.com/rholder/retrying)
 
 ## 从代码开始 Start from Code
 
