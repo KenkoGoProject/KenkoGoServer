@@ -7,6 +7,7 @@ from module.yaml_config import YamlConfig
 class UserConfig(metaclass=SingletonType):
     host = '0.0.0.0'  # 监听地址
     port = 18082  # 监听端口
+    token = ''  # http token
     github_proxy = ''  # GitHub代理配置
 
     data: YamlConfig = {}
@@ -26,11 +27,13 @@ class UserConfig(metaclass=SingletonType):
         # 读取配置
         self.port = int(self.data.get('port', self.port))
         self.host = str(self.data.get('host', self.host))
+        self.token = str(self.data.get('token', self.token))
         self.github_proxy = str(self.data.get('github_proxy', self.github_proxy))
 
         # 若配置项不存在，则创建配置项
         self.data.setdefault('port', self.port)
         self.data.setdefault('host', self.host)
+        self.data.setdefault('token', self.token)
         self.data.setdefault('github_proxy', self.github_proxy)
 
         self.log.debug(f'Config loaded: {dict(self.data)}')

@@ -22,8 +22,8 @@ class Global(metaclass=SingletonType):
 
     app_name = 'KenkoGo'  # 应用名称
     author_name = 'AkagiYui'  # 作者
-    version_num = 14  # 版本号
-    version_str = '0.2.3'  # 版本名称
+    version_num = 15  # 版本号
+    version_str = '0.3.0'  # 版本名称
     description = 'A Controller of go-cqhttp'  # 描述
 
     ############

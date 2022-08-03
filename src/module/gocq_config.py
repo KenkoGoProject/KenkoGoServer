@@ -49,12 +49,12 @@ class GocqConfig(metaclass=SingletonType):
                 'enabled': False,
                 'max-queue-size': 2000,
             },
-            'middlewares': DEFAULT_MIDDLEWARE,
+            'middlewares': DEFAULT_MIDDLEWARE.copy(),
         }
         servers[1]['ws-reverse'] = {
             'universal': f'ws://127.0.0.1:{Global().user_config.port}/instance',
             'reconnect-interval': 3000,
-            'middlewares': DEFAULT_MIDDLEWARE,
+            'middlewares': DEFAULT_MIDDLEWARE.copy(),
         }
         self.config.cover(data)
         self.config.save()

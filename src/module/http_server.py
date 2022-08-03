@@ -27,6 +27,8 @@ class HttpServer(FastAPI, metaclass=SingletonType):
             self.log.set_level(LogLevel.DEBUG)
         self.log.debug(f'{self.__class__.__name__} initializing...')
 
+        self.token = Global().user_config.token.strip()
+
         self.add_event_handler('startup', func=self.server_startup)
         self.add_event_handler('shutdown', func=self.server_shutdown)
         self.add_middleware(BaseHTTPMiddleware, dispatch=self.http_middleware)
@@ -71,7 +73,19 @@ class HttpServer(FastAPI, metaclass=SingletonType):
         """请求中间件"""
         self.log.debug(f'{request.method:.4s} {request.url.path} {request.query_params}')
         start_time = time.time()
-        response = await call_next(request)  # 请求处理
+
+        if self.token:
+            if header := request.headers.get('Authorization', None):
+                header = header.removeprefix('Bearer ')
+                if header != self.token:
+                    response = JSONResponse(content=HttpResult.no_auth(), status_code=401)
+                else:
+                    response = await call_next(request)
+            else:
+                response = JSONResponse(content=HttpResult.no_auth(), status_code=401)
+        else:
+            response = await call_next(request)
+
         process_time = time.time() - start_time
         response.headers['X-Process-Time'] = str(process_time)
         self.log.debug(f'{response.status_code}  Process Time: {process_time:.3f}s')

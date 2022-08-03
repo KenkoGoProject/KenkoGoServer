@@ -35,6 +35,8 @@ class InstanceController(APIRouter):
         await ws.accept()
         client = ws.client
         self.ws_log.info(f'New go-cqhttp connection: {client.host}:{client.port}')
+        if 'authorization' in ws.headers:
+            self.ws_log.debug(f'Connection token: {ws.headers["authorization"].removeprefix("Token ")}')
         try:
             while True:
                 s = await ws.receive_text()

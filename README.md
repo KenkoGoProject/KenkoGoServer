@@ -25,7 +25,8 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 - [x] go-cqhttp 消息转发
 - [x] 自动下载最新 go-cqhttp 二进制文件
 - [x] 为客户端提供 go-cqhttp 状态变化事件
-- [ ] 掉线重连（已添加，未测试）
+- [x] API 接口鉴权
+- [ ] 掉线重启（已添加，未测试）
 - [ ] 风控提示（已添加，未测试）
 - [ ] 与 NoneBot2 的驱动对接
 
@@ -178,6 +179,7 @@ python ./main.py --debug
 - [ ] 获取上传的文件列表
 - [ ] 定时删除过期的文件
 - [ ] 实例运行时允许先下载其他版本，其他时间再替换
+- [ ] 配置文件缺少项目时写出默认值
 
 ## 从代码开始 Start from Code
 
