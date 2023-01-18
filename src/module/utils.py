@@ -98,7 +98,7 @@ def get_os_type() -> OSType:
     elif system.startswith('lin'):
         if arch.startswith('amd64') or arch.startswith('x86_64'):
             return OSType.LINUX_AMD64
-    raise UnknownSystemError(f'Unknown system: {system} {arch}')
+    raise TypeError(f'Unknown system: {system} {arch}')
 
 
 def os_type_to_asset_finder(type_: OSType) -> Pattern[AnyStr]:
@@ -111,7 +111,7 @@ def os_type_to_asset_finder(type_: OSType) -> Pattern[AnyStr]:
         return re.compile(r'linux.+amd64.*tar\.gz')  # type: ignore[arg-type]
     elif type_ == OSType.LINUX_I386:
         return re.compile(r'linux.+386.*tar\.gz')  # type: ignore[arg-type]
-    raise UnknownSystemError(f'Unknown system: {type_}')
+    raise TypeError(f'Unknown system: {type_}')
 
 
 def download_file(url: str, file_path: str) -> None:

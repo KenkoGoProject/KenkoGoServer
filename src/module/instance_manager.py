@@ -167,11 +167,11 @@ class InstanceManager(metaclass=SingletonType):
             ...
         elif text_output.startswith('Protocol -> '):
             text_output = text_output.removeprefix('Protocol -> ')
+            # Protocol -> parse incoming packet error: return code unsuccessful: -10001
             if text_output.startswith('connect to server'):
                 return False
             elif text_output.startswith('unexpected disconnect: '):
-                text_output = text_output.removeprefix('unexpected disconnect: ')
-                self.log.warning(f'预期外的断线: {text_output}')
+                self.log.warning(f'预期外的断线: {text_output.removeprefix("unexpected disconnect: ")}')
             elif text_output.startswith('register client failed: Packet timed out'):
                 self.log.warning('注册客户端失败: 数据包超时')
             elif text_output.startswith('connect server error: dial tcp error: '):

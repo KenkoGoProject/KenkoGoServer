@@ -4,7 +4,6 @@
 ![License](https://img.shields.io/github/license/KenkoGoProject/KenkoGoServer)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/KenkoGoProject/KenkoGoServer)
 ![lines](https://img.shields.io/tokei/lines/github/KenkoGoProject/KenkoGoServer)
-[![OSCS Status](https://www.oscs1024.com/platform/badge/KenkoGoProject/KenkoGoServer.git.svg)](https://www.murphysec.com/dr/nz85l1OmneIOz3uzYE)
 
 A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 
