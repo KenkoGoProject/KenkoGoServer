@@ -26,7 +26,7 @@ class YamlConfig(UserDict):
     def load(self) -> None:
         """重新加载文件"""
         try:
-            with open(self.path, 'r', encoding='utf-8') as f:
+            with open(self.path, encoding='utf-8') as f:
                 self.data.update(self.yaml_controller.load(f))
         except FileNotFoundError:
             if self.auto_create:

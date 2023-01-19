@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from assets.http_result import HttpResult
 from module.global_dict import Global
+from module.http_result import HttpResult
 from module.logger_ex import LoggerEx, LogLevel
 
 

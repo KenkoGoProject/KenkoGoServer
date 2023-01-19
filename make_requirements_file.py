@@ -4,12 +4,13 @@ import subprocess
 
 status = 0
 
-for i in ('requirements', 'requirements-dev', 'requirements-build'):
+for i in ('requirements', 'requirements-dev'):
     status += subprocess.call(['pip-compile', f'{i}.in',
                                '--output-file', f'{i}.txt',
-                               '--annotation-style=line'])
+                               '--annotation-style=line',
+                               '--resolver=backtracking'])
     with contextlib.suppress(FileNotFoundError):
-        with open(f'{i}.txt', 'r') as f:
+        with open(f'{i}.txt') as f:
             lines = f.readlines()
         with open(f'{i}.txt', 'w') as f:
             for line in lines:

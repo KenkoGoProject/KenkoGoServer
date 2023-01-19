@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-types-requests==2.28.3
+types-requests==2.28.11.8
 isort>=5.10.1  # import sorting import排序
 flake8>=5.0.4  # code style checking 代码风格检查
 flake8-docstrings>=1.6.0  # docstring style checking 文档字符串风格检查
 mypy>=0.991  # type checking 类型检查
 pip-tools>=6.10.0  # pip requirements management 依赖管理
-pre-commit
+pre-commit>=2.21.0

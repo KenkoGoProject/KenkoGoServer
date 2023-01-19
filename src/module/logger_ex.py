@@ -1,11 +1,17 @@
 import logging
 import traceback
 from logging import Formatter
+from typing import Union
 
+import rich
+from rich.console import ConsoleRenderable
 from rich.logging import RichHandler
+from rich.pretty import pprint
 
 
 class LogLevel(int):
+    """日志等级"""
+
     CRITICAL = logging.CRITICAL  # 50
     FATAL = CRITICAL
     ERROR = logging.ERROR  # 40
@@ -37,6 +43,7 @@ class LoggerEx:
         self.name = name or traceback.extract_stack()[-2].name
         self.show_name = show_name
         self.logger = logging.getLogger(self.name)
+        self.last_log = ''
 
         if not self.logger.hasHandlers():
             rich_handler = RichHandler(show_time=False, show_path=False, rich_tracebacks=True, tracebacks_show_locals=True)
@@ -55,28 +62,56 @@ class LoggerEx:
         """
         self.logger.setLevel(level)
 
+    def print(self, *obj: Union[ConsoleRenderable, str], **kwargs) -> None:
+        """打印对象"""
+        self.last_log = obj
+        if hasattr(self, 'console'):
+            self.console.print(*obj)
+        else:
+            rich.print(*obj, **kwargs)
+
+    def print_object(self, _object) -> None:
+        """打印对象
+
+        :param _object: 欲打印对象"""
+        self.last_log = _object
+        pprint(_object, expand_all=True)
+
+    def input(self, *args, **kwargs) -> str:
+        """打印 input"""
+        if hasattr(self, 'console'):
+            return self.console.input(*args, **kwargs)
+        else:
+            return input(*args, **kwargs)
+
     def debug(self, *args, **kwargs) -> None:
         """输出 debug 等级的日志"""
+        self.last_log = args
         self.logger.debug(*args, **kwargs)
 
     def info(self, *args, **kwargs) -> None:
         """输出 info 等级的日志"""
+        self.last_log = args
         self.logger.info(*args, **kwargs)
 
     def warning(self, *args, **kwargs) -> None:
         """输出 warning 等级的日志"""
+        self.last_log = args
         self.logger.warning(*args, **kwargs)
 
     def error(self, *args, **kwargs) -> None:
         """输出 error 等级的日志"""
+        self.last_log = args
         self.logger.error(*args, **kwargs)
 
     def critical(self, *args, **kwargs) -> None:
         """输出 critical 等级的日志"""
+        self.last_log = args
         self.logger.critical(*args, **kwargs)
 
     def exception(self, *args, **kwargs) -> None:
         """打印 exception"""
+        self.last_log = args
         self.logger.exception(*args, **kwargs)
 
 
@@ -84,11 +119,11 @@ if __name__ == '__main__':
 
     def haha():
         log = LoggerEx(log_level=LogLevel.DEBUG)
-        log.info("Hello, World!")
-        log.critical("[blue underline]Hello, World!")
-        log.debug("[blue underline]Hello, World!")
-        log.warning("Hello, World!")
-        log.error("Hello, World!")
+        log.info('Hello, World!')
+        log.critical('[blue underline]Hello, World!')
+        log.debug('[blue underline]Hello, World!')
+        log.warning('Hello, World!')
+        log.error('Hello, World!')
         # log.trace("Hello, World!")
 
     # haha()

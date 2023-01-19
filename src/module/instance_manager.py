@@ -1,15 +1,15 @@
 import re
 import subprocess
 import time
+from threading import Thread
 from typing import Union
 
-from assets.server_event import ServerEvent
+from module.constans import QRCODE_DETECT_OUTPUT
 from module.exception_ex import DownloadError
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
+from module.server_event import ServerEvent
 from module.singleton_type import SingletonType
-from module.thread_ex import ThreadEx
-from module.utils import decode_qrcode, print_qrcode
 
 
 class InstanceManager(metaclass=SingletonType):
@@ -27,7 +27,7 @@ class InstanceManager(metaclass=SingletonType):
         self.ready_to_start = False  # 实例是否准备好启动
 
         self.process: Union[subprocess.Popen, None] = None  # go-cqhttp 实例进程
-        self.thread_read_output: Union[ThreadEx, None] = None  # 控制台输出检查线程
+        self.thread_read_output: Union[Thread, None] = None  # 控制台输出检查线程
         self.websocket_manager = Global().websocket_manager
 
     def check(self) -> None:
@@ -71,7 +71,7 @@ class InstanceManager(metaclass=SingletonType):
             encoding='utf-8',
         )
         self.instance_started = True
-        self.thread_read_output = ThreadEx(target=self._read_output)
+        self.thread_read_output = Thread(target=self._read_output)
         self.thread_read_output.start()
         return True
 
@@ -109,12 +109,19 @@ class InstanceManager(metaclass=SingletonType):
             text_output = text_output.strip()
 
             # 删除颜色标签
-            color_regex = re.compile(r'\x1b\[\d+(;\d+)?m')
+            color_regex = re.compile(r'\x1b\[\d+(;\d+)*m')
             match_result = re.match(color_regex, text_output)
             if not match_result:
                 self.proc_log.debug(text_output)
                 continue
             text_output = re.sub(color_regex, '', text_output).strip()
+
+            if text_output == '':
+                last_log, *_ = self.proc_log.last_log
+                if last_log == QRCODE_DETECT_OUTPUT:
+                    continue
+                self.proc_log.debug(QRCODE_DETECT_OUTPUT)
+                continue
 
             # 删除日期与日志等级
             match_result = re.match(r'\[\d+-\d+-\d+ \d+:\d+:\d+] \[[A-Z]+\]: ', text_output)
@@ -238,9 +245,10 @@ class InstanceManager(metaclass=SingletonType):
         self.log.info(f'等待扫描二维码 http://{Global().host_with_port}/instance/qrcode')
         self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('need_scan'))
         try:
-            with Global().qrcode_path.open('rb') as f:
-                qrcode = f.read()
-            code_url = decode_qrcode(qrcode)
-            print_qrcode(code_url)
+            # with Global().qrcode_path.open('rb') as f:
+            #     qrcode = f.read()
+            # code_url = decode_qrcode(qrcode)
+            # print_qrcode(code_url)
+            ...
         except Exception as e:
             self.log.exception(e)

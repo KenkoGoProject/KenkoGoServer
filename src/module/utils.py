@@ -9,6 +9,7 @@ from datetime import datetime
 from io import BytesIO, StringIO
 from pathlib import Path, PurePath
 from re import Pattern
+from threading import Thread
 from typing import AnyStr, Type, TypeVar
 
 import distro as distro
@@ -19,9 +20,8 @@ from PIL import Image
 from pyzbar.pyzbar import decode as pyzbar_decode
 from rich.progress import track
 
-from assets.os_type import OSType
 from module.atomicwrites import atomic_write
-from module.exception_ex import UnknownSystemError
+from module.os_type import OSType
 
 
 def is_port_in_use(_port: int, _host: str = '127.0.0.1') -> bool:
@@ -37,7 +37,7 @@ def is_port_in_use(_port: int, _host: str = '127.0.0.1') -> bool:
         s.settimeout(1)
         s.connect((_host, _port))
         return True
-    except socket.error:
+    except OSError:
         return False
     finally:
         if s:
@@ -261,6 +261,29 @@ def get_random_free_port(min_: int = 10000, max_: int = 65535, default: int = No
     while is_port_in_use(result):
         result = random.randint(min_, max_)
     return result
+
+
+def change_console_title(title: str) -> None:
+    """Windows 平台修改控制台标题"""
+    import contextlib
+    import ctypes
+    with contextlib.suppress(Exception):
+        ctypes.windll.kernel32.SetConsoleTitleW(title)
+
+
+def kill_thread(thread: Thread) -> None:
+    """强制结束线程，注意不得设计为对象方法！"""
+    exctype = SystemExit
+    if not (thread.is_alive() and thread.ident):
+        return
+    import ctypes
+    tid = ctypes.c_long(thread.ident)
+    res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exctype))
+    if res == 0:
+        raise ValueError('invalid thread id')
+    elif res != 1:
+        ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
+        raise SystemError('PyThreadState_SetAsyncExc failed')
 
 
 if __name__ == '__main__':

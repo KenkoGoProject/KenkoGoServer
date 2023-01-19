@@ -4,8 +4,8 @@ from typing import Optional
 
 import psutil
 
-from assets.os_type import OSType
 from module.console import Console
+from module.os_type import OSType
 from module.singleton_type import SingletonType
 from module.utils import (get_os_type, get_script_memory_usage,
                           get_script_uptime, get_self_ip,
@@ -17,17 +17,7 @@ class Global(metaclass=SingletonType):
     """单例模式，全局变量"""
 
     ############
-    # 基础的信息 #
-    ############
-
-    app_name = 'KenkoGo'  # 应用名称
-    author_name = 'AkagiYui'  # 作者
-    version_num = 16  # 版本号
-    version_str = '0.3.1'  # 版本名称
-    description = 'A Controller of go-cqhttp'  # 描述
-
-    ############
-    # 全局的变量 #
+    # 全局变量 #
     ############
 
     exit_code = 0  # 退出码
@@ -66,7 +56,7 @@ class Global(metaclass=SingletonType):
         return f'{host}:{self.user_config.port}'
 
     ############
-    # 共享的对象 #
+    # 共享对象 #
     ############
 
     user_config = None  # 用户配置  # type: UserConfig
@@ -82,13 +72,14 @@ class Global(metaclass=SingletonType):
     args_unknown = ()  # 未知命令
 
     ############
-    # 目录与路径 #
+    # 目录路径 #
     ############
 
     root_dir = Path('.')  # 根目录
-    download_dir = Path(root_dir, 'downloads')  # 下载目录
+    data_dir = Path(root_dir, 'data')  # 用户数据目录
+    download_dir = Path(data_dir, 'downloads')  # 下载目录
 
-    gocq_dir = Path(root_dir, 'gocq')  # gocq实例目录
+    gocq_dir = Path(data_dir, 'gocq')  # gocq实例目录
     gocq_config_path = Path(gocq_dir, 'config.yml')  # gocq配置文件路径
     qrcode_path = Path(gocq_dir, 'qrcode.png')  # 二维码路径
 

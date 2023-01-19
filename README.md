@@ -15,7 +15,7 @@ A Controller of [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)
 或使用 [kenkogo-webui](https://github.com/KenkoGoProject/kenkogo-webui) 查看数据。
 
 
-## 功能介绍 Introduction 
+## 功能介绍 Introduction
 
 这是一个 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp) 守护程序
 
@@ -55,11 +55,11 @@ cp config.yaml.bak config.yaml
 ```
 
 > 配置项说明
-> 
+>
 > host: 监听地址，默认为 0.0.0.0，即监听所有地址。
-> 
+>
 > post: 监听端口，默认为 18082。
-> 
+>
 > github_proxy: GitHub 代理地址，暂时仅用于下载 go-cqhttp，目前仅支持 `ghproxy.com`，留空表示不使用代理。
 
 3. 启动脚本
@@ -69,13 +69,13 @@ python ./main.py --debug
 ```
 
 > 命令行参数说明
-> 
+>
 > -h --help: 显示帮助信息
-> 
+>
 > -a --auto-start: 自动启动 go-cqhttp
-> 
+>
 > -d --debug: 开启调试模式，将输出更多信息
-> 
+>
 > -c --config: 指定配置文件路径
 
 4. 客户端连接
@@ -106,7 +106,7 @@ cd ./src
 
 2. 修改配置文件
 
-你也可以跳过这一步， KenkoGo 将会自动生成一个配置文件。
+你也可以跳过这一步， KenkoGoServer 将会自动生成一个配置文件。
 
 ```shell
 cp config.yaml.bak config.yaml
@@ -120,7 +120,7 @@ python ./main.py --debug
 
 4. 客户端连接
 
-当控制台提示`KenkoGo Started at xxx`时，可输入`/help`查看可用的指令。
+当控制台提示`KenkoGoServer Started at xxx`时，可输入`/help`查看可用的指令。
 
 或者使用 [KenkoGoClient](https://github.com/KenkoGoProject/KenkoGoClient) 连接 KenkoGo。
 

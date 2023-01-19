@@ -3,8 +3,8 @@ from typing import Union
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
-from assets.http_result import HttpResult
 from module.global_dict import Global
+from module.http_result import HttpResult
 from module.logger_ex import LoggerEx, LogLevel
 
 
@@ -28,7 +28,7 @@ class InstanceController(APIRouter):
         self.add_api_websocket_route('', self.gocq_websocket_proxy)
         self.add_api_route('/start', self.start, methods=['POST'])
         self.add_api_route('/stop', self.stop, methods=['POST'])
-        self.add_api_route('/qrcode', self.qrcode, methods=['GET'])
+        self.add_api_route('/qrcode', self.qrcode, methods=['GET'], response_model=None)
 
     async def gocq_websocket_proxy(self, ws: WebSocket) -> None:
         """go-cqhttp WebSocket 转发代理"""

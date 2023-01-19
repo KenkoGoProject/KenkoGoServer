@@ -4,10 +4,10 @@ from pathlib import Path
 
 import requests
 
-from assets.release import Asset, Release
 from module.exception_ex import ReleaseNotFoundError
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
+from module.release import Asset, Release
 from module.singleton_type import SingletonType
 from module.utils import (dict_to_object, download_file, get_os_type,
                           os_type_to_asset_finder)

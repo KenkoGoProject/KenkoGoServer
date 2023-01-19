@@ -31,5 +31,3 @@ mypy src/ --show-error-codes --follow-imports=skip --ignore-missing-imports --ex
 # 生成 requirements*.txt
 pip-compile  --annotation-style=line
 ```
-
-

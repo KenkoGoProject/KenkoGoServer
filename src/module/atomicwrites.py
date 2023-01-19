@@ -4,7 +4,6 @@ Modified by AkagiYui
 """
 
 import contextlib
-import io
 import os
 import sys
 import tempfile
@@ -179,7 +178,7 @@ class AtomicWriter:
         os.close(descriptor)
         kwargs['mode'] = self._mode
         kwargs['file'] = name
-        return io.open(**kwargs)
+        return open(**kwargs)
 
     @classmethod
     def sync(cls, f):

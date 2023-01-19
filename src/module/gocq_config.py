@@ -1,4 +1,4 @@
-from assets.default_config import DEFAULT_GOCQ_CONFIG, DEFAULT_MIDDLEWARE
+from module.default_config import DEFAULT_GOCQ_CONFIG, DEFAULT_MIDDLEWARE
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType

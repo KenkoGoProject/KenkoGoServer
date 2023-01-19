@@ -1,23 +1,10 @@
 from fastapi import WebSocket
 from rich.table import Table
 
+from module.constans import COMMAND_HELP_TEXT
 from module.global_dict import Global
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
-from module.utils import decode_qrcode, print_qrcode
-
-HELP_TEXT = """支持的命令 Available commands:
-/help: 显示此帮助 Show this help message
-/exit: 退出KenkoGo Quit the application
-
-/info: 查看各种信息 Show the information
-
-/start: 启动go-cqhttp Start go-cqhttp
-/stop: 停止go-cqhttp Stop go-cqhttp
-/qrcode: 显示登录二维码 Show qrcode of go-cqhttp
-
-/list：列出所有客户端 List all clients
-"""
 
 
 class CommandHandler(metaclass=SingletonType):
@@ -29,7 +16,7 @@ class CommandHandler(metaclass=SingletonType):
     def add(self, command) -> None:
         self.log.debug(f'Get command: {command}')
         if command in ['/help', '/h']:
-            Global().console.print(HELP_TEXT)
+            Global().console.print(COMMAND_HELP_TEXT)
         elif command == '/exit':
             Global().time_to_exit = True
         elif command == '/info':
@@ -39,13 +26,18 @@ class CommandHandler(metaclass=SingletonType):
         elif command == '/stop':
             Global().instance_manager.stop()
         elif command in ['/qrcode', '/qr']:
-            try:
-                with Global().qrcode_path.open('rb') as f:
-                    qrcode = f.read()
-                code_url = decode_qrcode(qrcode)
-                print_qrcode(code_url)
-            except Exception as e:
-                self.log.error(e)
+            qrcode_path = Global().qrcode_path
+            if qrcode_path.exists():
+                try:
+                    # with Global().qrcode_path.open('rb') as f:
+                    #     qrcode = f.read()
+                    # code_url = decode_qrcode(qrcode)
+                    # print_qrcode(code_url)
+                    ...
+                except Exception as e:
+                    self.log.error(e)
+            else:
+                self.log.error('qrcode not exists')
         elif command in ['/list', '/ls', 'ls']:
             self.list_clients()
         else:

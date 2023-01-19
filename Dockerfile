@@ -29,8 +29,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 && rm -rf ~/.cache/pip
 
 EXPOSE 18082
-VOLUME /app/downloads
-VOLUME /app/gocq
+VOLUME /app/data
 
 WORKDIR /app
 ENTRYPOINT ["python", "main.py"]

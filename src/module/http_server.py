@@ -7,12 +7,13 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from assets.http_result import HttpResult
+from module.constans import APP_NAME
 from module.controller.client_controller import ClientController
 from module.controller.gocq_binary_controller import GocqBinaryController
 from module.controller.information_controller import InformationController
 from module.controller.instance_controller import InstanceController
 from module.global_dict import Global
+from module.http_result import HttpResult
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
 
@@ -21,7 +22,7 @@ class HttpServer(FastAPI, metaclass=SingletonType):
 
     def __init__(self):
         """初始化"""
-        super().__init__(docs_url='/docs', redoc_url=None, title=Global().app_name)  # 关闭 redoc
+        super().__init__(docs_url='/docs', redoc_url=None, title=APP_NAME)  # 关闭 redoc
         self.log = LoggerEx(self.__class__.__name__)
         if Global().debug_mode:
             self.log.set_level(LogLevel.DEBUG)
@@ -57,7 +58,7 @@ class HttpServer(FastAPI, metaclass=SingletonType):
         """事件 服务启动"""
         self.log.debug('HttpServer startup.')
         self.log.debug(f'Try from http://{Global().host_with_port}')
-        self.log.info(f'{Global().app_name} started at '
+        self.log.info(f'{APP_NAME} started at '
                       f'http://{Global().user_config.host}:{Global().user_config.port} .')
         self.log.info('Try in https://kenkogo.akagiyui.com')
         time.sleep(5)
@@ -94,4 +95,4 @@ class HttpServer(FastAPI, metaclass=SingletonType):
     @staticmethod
     async def route_root() -> dict:
         """根路由"""
-        return HttpResult.success(f'This is {Global().app_name}!')
+        return HttpResult.success(f'This is {APP_NAME}!')
