@@ -10,7 +10,7 @@ from io import BytesIO, StringIO
 from pathlib import Path, PurePath
 from re import Pattern
 from threading import Thread
-from typing import AnyStr, Type, TypeVar
+from typing import Any, AnyStr, Hashable, Sequence, Type, TypeVar
 
 import distro as distro
 import psutil as psutil
@@ -284,6 +284,23 @@ def kill_thread(thread: Thread) -> None:
     elif res != 1:
         ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
         raise SystemError('PyThreadState_SetAsyncExc failed')
+
+
+def put_into_dict(dict_: dict, path: Sequence[Hashable], value: Any) -> None:
+    """将数据放入字典
+    :param dict_: 字典
+    :param path: 路径
+    :param value: 值
+    """
+    if not path:
+        return
+    current_key = path[0]
+    if len(path) == 1:
+        dict_[current_key] = value
+    else:
+        if current_key not in dict_:
+            dict_[current_key] = {}
+        put_into_dict(dict_[current_key], path[1:], value)
 
 
 if __name__ == '__main__':

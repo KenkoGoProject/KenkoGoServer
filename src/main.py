@@ -43,7 +43,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('-h', '--help', action='store_true', help='Show this message and exit.')
     parser.add_argument('-d', '--debug', action='store_true', help='Debug mode, show debug log.')
-    parser.add_argument('-c', '--config', help='Path of config file.', default='config.yaml')
+    parser.add_argument('-c', '--config', help='Path of config file.', default='data/config.yaml')
     for argument in console_arguments:
         parser.add_argument(*argument.flags, action=argument.action, help=argument.help_text)
 

@@ -183,6 +183,11 @@ class InstanceManager(metaclass=SingletonType):
                 self.log.warning('注册客户端失败: 数据包超时')
             elif text_output.startswith('connect server error: dial tcp error: '):
                 self.log.warning('服务器连接失败')
+                if 'An established connection was aborted by the software in your host machine.' in text_output:
+                    self.log.error('重试失败，go-cqhttp将被重启')
+                    self.websocket_manager.broadcast_sync(ServerEvent.gocq_event('fail_connect'))
+                    self.restart()
+                    return True
             elif text_output.startswith('resolve long message server error'):
                 self.log.warning('长消息服务器延迟测试失败')
             elif text_output.startswith('test long message server response latency error'):
