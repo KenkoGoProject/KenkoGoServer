@@ -8,12 +8,15 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from module.constans import APP_NAME
-from module.controller.client_controller import ClientController
-from module.controller.gocq_binary_controller import GocqBinaryController
-from module.controller.information_controller import InformationController
-from module.controller.instance_controller import InstanceController
 from module.global_dict import Global
-from module.http_result import HttpResult
+from module.http_server.controller.client_controller import ClientController
+from module.http_server.controller.gocq_binary_controller import \
+    GocqBinaryController
+from module.http_server.controller.information_controller import \
+    InformationController
+from module.http_server.controller.instance_controller import \
+    InstanceController
+from module.http_server.http_result import HttpResult
 from module.logger_ex import LoggerEx, LogLevel
 from module.singleton_type import SingletonType
 
@@ -75,18 +78,11 @@ class HttpServer(FastAPI, metaclass=SingletonType):
         self.log.debug(f'{request.method:.4s} {request.url.path} {request.query_params}')
         start_time = time.time()
 
-        if self.token:
-            if header := request.headers.get('Authorization', None):
-                header = header.removeprefix('Bearer ')
-                if header != self.token:
-                    response = JSONResponse(content=HttpResult.no_auth(), status_code=401)
-                else:
-                    response = await call_next(request)
-            else:
-                response = JSONResponse(content=HttpResult.no_auth(), status_code=401)
-        else:
-            response = await call_next(request)
+        header = request.headers.get('Authorization', None)
+        if self.token and (not header or header.removeprefix('Bearer ') != self.token):
+            return JSONResponse(content=HttpResult.no_auth(), status_code=401)
 
+        response = await call_next(request)
         process_time = time.time() - start_time
         response.headers['X-Process-Time'] = str(process_time)
         self.log.debug(f'{response.status_code}  Process Time: {process_time:.3f}s')

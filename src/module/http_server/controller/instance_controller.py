@@ -4,7 +4,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
 from module.global_dict import Global
-from module.http_result import HttpResult
+from module.http_server.http_result import HttpResult
 from module.logger_ex import LoggerEx, LogLevel
 
 

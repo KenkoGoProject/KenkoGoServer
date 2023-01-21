@@ -7,7 +7,7 @@ from module.exception_ex import PortInUseError
 from module.global_dict import Global
 from module.gocq_binary_manager import GocqBinaryManager
 from module.gocq_config import GocqConfig
-from module.http_server import HttpServer
+from module.http_server.http_server import HttpServer
 from module.instance_manager import InstanceManager
 from module.logger_ex import LoggerEx, LogLevel
 from module.user_config import UserConfig
@@ -18,7 +18,7 @@ from module.websocket_manager import WebsocketManager
 class KenkoGoServer:
     """主功能模块"""
 
-    def __init__(self, config: UserConfig):
+    def __init__(self, _: UserConfig):
         self.log = LoggerEx(self.__class__.__name__)
         if Global().debug_mode:
             self.log.set_level(LogLevel.DEBUG)
