@@ -1,5 +1,5 @@
 APP_NAME = 'KenkoGoServer'  # 应用名称
-APP_DESCRIPTION = 'A Controller of go-cqhttp'  # 描述
+APP_DESCRIPTION = 'A Controller of go-cqhttp.'  # 描述
 AUTHOR_NAME = 'AkagiYui'  # 作者
 VERSION_NUM = 16  # 版本号
 VERSION_STR = '0.3.1'  # 版本名称

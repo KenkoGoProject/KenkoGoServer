@@ -1,10 +1,10 @@
 from fastapi import WebSocket
 from rich.table import Table
 
+from module.common.logger_ex import LoggerEx, LogLevel
+from module.common.singleton_type import SingletonType
 from module.constans import COMMAND_HELP_TEXT
 from module.global_dict import Global
-from module.logger_ex import LoggerEx, LogLevel
-from module.singleton_type import SingletonType
 
 
 class CommandHandler(metaclass=SingletonType):

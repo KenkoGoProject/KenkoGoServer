@@ -2,17 +2,17 @@ from threading import Thread
 
 import uvicorn as uvicorn
 
+from module.common.logger_ex import LoggerEx, LogLevel
+from module.common.utils import is_port_in_use, kill_thread
 from module.constans import APP_DESCRIPTION, APP_NAME, VERSION_NUM, VERSION_STR
-from module.exception_ex import PortInUseError
+from module.exception import PortInUseError
 from module.global_dict import Global
 from module.gocq_binary_manager import GocqBinaryManager
 from module.gocq_config import GocqConfig
 from module.http_server.http_server import HttpServer
+from module.http_server.websocket_manager import WebsocketManager
 from module.instance_manager import InstanceManager
-from module.logger_ex import LoggerEx, LogLevel
 from module.user_config import UserConfig
-from module.utils import is_port_in_use, kill_thread
-from module.websocket_manager import WebsocketManager
 
 
 class KenkoGoServer:

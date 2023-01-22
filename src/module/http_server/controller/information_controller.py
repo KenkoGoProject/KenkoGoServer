@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
+from module.common.http_result import HttpResult
+from module.common.logger_ex import LoggerEx, LogLevel
 from module.global_dict import Global
-from module.http_server.http_result import HttpResult
-from module.logger_ex import LoggerEx, LogLevel
 
 
 class InformationController(APIRouter):

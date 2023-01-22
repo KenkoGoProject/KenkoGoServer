@@ -1,0 +1,2 @@
+class ReleaseNotFoundError(Exception):
+    pass

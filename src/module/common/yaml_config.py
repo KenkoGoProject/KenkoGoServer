@@ -2,7 +2,7 @@ from collections import UserDict
 
 import ruamel.yaml as yaml
 
-from module.atomicwrites import atomic_write
+from module.common.atomicwrites import atomic_write
 
 
 class YamlConfig(UserDict):

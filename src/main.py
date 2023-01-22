@@ -6,13 +6,13 @@ from typing import Any
 from rich.traceback import install as install_rich_traceback
 
 from module.command_handler import CommandHandler
-from module.console import Console
-from module.console_argument import ConsoleArgument
+from module.common.console import Console
+from module.common.console_argument import ConsoleArgument
+from module.common.logger_ex import LoggerEx, LogLevel
+from module.common.utils import change_console_title
 from module.constans import APP_DESCRIPTION, APP_NAME, VERSION_STR
 from module.global_dict import Global
-from module.logger_ex import LoggerEx, LogLevel
 from module.user_config import UserConfig
-from module.utils import change_console_title
 
 console_arguments = [
     ConsoleArgument('auto_start', ['-a', '--auto-start'], 'store_true', 'Auto start go-cqhttp'),

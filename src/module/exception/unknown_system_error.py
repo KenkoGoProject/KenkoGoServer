@@ -1,0 +1,2 @@
+class UnknownSystemError(Exception):
+    pass
