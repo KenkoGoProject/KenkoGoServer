@@ -7,18 +7,16 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from module.common.http_result import HttpResult
-from module.common.logger_ex import LoggerEx, LogLevel
-from module.common.singleton_type import SingletonType
+from common.http_result import HttpResult
+from common.logger_ex import LoggerEx, LogLevel
+from common.singleton_type import SingletonType
 from module.constans import APP_NAME
 from module.global_dict import Global
-from module.http_server.controller.client_controller import ClientController
-from module.http_server.controller.gocq_binary_controller import \
-    GocqBinaryController
-from module.http_server.controller.information_controller import \
-    InformationController
-from module.http_server.controller.instance_controller import \
-    InstanceController
+
+from .controller.client_controller import ClientController
+from .controller.gocq_binary_controller import GocqBinaryController
+from .controller.information_controller import InformationController
+from .controller.instance_controller import InstanceController
 
 
 class HttpServer(FastAPI, metaclass=SingletonType):

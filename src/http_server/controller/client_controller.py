@@ -5,9 +5,9 @@ import requests
 from fastapi import (APIRouter, Request, UploadFile, WebSocket,
                      WebSocketDisconnect)
 
-from module.common.http_result import HttpResult
-from module.common.logger_ex import LoggerEx, LogLevel
-from module.common.utils import get_random_str
+from common.http_result import HttpResult
+from common.logger_ex import LoggerEx, LogLevel
+from common.utils import get_random_str
 from module.global_dict import Global
 
 

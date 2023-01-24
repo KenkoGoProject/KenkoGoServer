@@ -4,10 +4,10 @@ import time
 from threading import Thread
 from typing import Union
 
-from module.common.logger_ex import LoggerEx, LogLevel
-from module.common.singleton_type import SingletonType
+from common.logger_ex import LoggerEx, LogLevel
+from common.singleton_type import SingletonType
+from exception import DownloadError
 from module.constans import QRCODE_DETECT_OUTPUT
-from module.exception import DownloadError
 from module.global_dict import Global
 from module.server_event import ServerEvent
 

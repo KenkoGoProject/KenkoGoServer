@@ -1,7 +1,7 @@
-from module.common.logger_ex import LoggerEx, LogLevel
-from module.common.singleton_type import SingletonType
-from module.common.utils import get_random_free_port
-from module.common.yaml_config import YamlConfig
+from common.logger_ex import LoggerEx, LogLevel
+from common.singleton_type import SingletonType
+from common.utils import get_random_free_port
+from common.yaml_config import YamlConfig
 from module.default_config import DEFAULT_GOCQ_CONFIG, DEFAULT_MIDDLEWARE
 from module.global_dict import Global
 

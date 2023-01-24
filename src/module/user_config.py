@@ -1,6 +1,6 @@
-from module.common.logger_ex import LoggerEx, LogLevel
-from module.common.singleton_type import SingletonType
-from module.common.yaml_config import YamlConfig
+from common.logger_ex import LoggerEx, LogLevel
+from common.singleton_type import SingletonType
+from common.yaml_config import YamlConfig
 from module.global_dict import Global
 
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from module.common.http_result import HttpResult
-from module.common.logger_ex import LoggerEx, LogLevel
-from module.exception import ReleaseNotFoundError
+from common.http_result import HttpResult
+from common.logger_ex import LoggerEx, LogLevel
+from exception import ReleaseNotFoundError
 from module.global_dict import Global
 
 

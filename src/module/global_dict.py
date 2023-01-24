@@ -4,13 +4,13 @@ from typing import Optional
 
 import psutil
 
-from module.common.console import Console
-from module.common.os_type import OSType
-from module.common.singleton_type import SingletonType
-from module.common.utils import (get_os_type, get_script_memory_usage,
-                                 get_script_uptime, get_self_ip,
-                                 get_system_description,
-                                 get_system_memory_usage, get_system_uptime)
+from common.console import Console
+from common.os_type import OSType
+from common.singleton_type import SingletonType
+from common.utils import (get_os_type, get_script_memory_usage,
+                          get_script_uptime, get_self_ip,
+                          get_system_description, get_system_memory_usage,
+                          get_system_uptime)
 
 
 class Global(metaclass=SingletonType):

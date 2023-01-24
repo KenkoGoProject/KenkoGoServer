@@ -1,7 +1,7 @@
 from rich.console import Console as RichConsole
 from rich.pretty import pprint as pretty_print
 
-from module.common.singleton_type import SingletonType
+from common.singleton_type import SingletonType
 
 
 class Console(RichConsole, metaclass=SingletonType):

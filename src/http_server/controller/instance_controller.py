@@ -3,8 +3,8 @@ from typing import Union
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
-from module.common.http_result import HttpResult
-from module.common.logger_ex import LoggerEx, LogLevel
+from common.http_result import HttpResult
+from common.logger_ex import LoggerEx, LogLevel
 from module.global_dict import Global
 
 

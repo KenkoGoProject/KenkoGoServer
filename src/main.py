@@ -5,11 +5,11 @@ from typing import Any
 
 from rich.traceback import install as install_rich_traceback
 
+from common.console import Console
+from common.console_argument import ConsoleArgument
+from common.logger_ex import LoggerEx, LogLevel
+from common.utils import change_console_title
 from module.command_handler import CommandHandler
-from module.common.console import Console
-from module.common.console_argument import ConsoleArgument
-from module.common.logger_ex import LoggerEx, LogLevel
-from module.common.utils import change_console_title
 from module.constans import APP_DESCRIPTION, APP_NAME, VERSION_STR
 from module.global_dict import Global
 from module.user_config import UserConfig

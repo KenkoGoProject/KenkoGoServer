@@ -20,8 +20,8 @@ from PIL import Image
 from pyzbar.pyzbar import decode as pyzbar_decode
 from rich.progress import track
 
-from module.common.atomicwrites import atomic_write
-from module.common.os_type import OSType
+from common.atomicwrites import atomic_write
+from common.os_type import OSType
 
 
 def is_port_in_use(_port: int, _host: str = '127.0.0.1') -> bool:
