@@ -91,7 +91,7 @@ if __name__ == '__main__':
         try:
             log.debug(f'{APP_NAME} Starting...')
             # 启动应用
-            from module.kenko_go_server import KenkoGoServer as App
+            from module.kenkogo_server import KenkoGoServer as App
             type_of_app = App
             app = App(user_config)
             Global().application = app

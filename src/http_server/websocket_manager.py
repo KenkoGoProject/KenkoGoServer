@@ -1,7 +1,7 @@
 import asyncio
 import contextlib
 import json
-from typing import List, Tuple, Union
+from typing import Union
 
 from fastapi import WebSocket
 
@@ -20,7 +20,7 @@ class WebsocketManager(metaclass=SingletonType):
             self.log.set_level(LogLevel.DEBUG)
         self.log.debug(f'{self.__class__.__name__} Initializing...')
 
-        self.active_connections: List[Tuple[WebSocket, bool]] = []  # 存活连接
+        self.active_connections: list[tuple[WebSocket, bool]] = []  # 存活连接
 
     async def connect(self, websocket: WebSocket, blob: bool = False) -> None:
         """接受新的WebSocket连接
@@ -45,7 +45,7 @@ class WebsocketManager(metaclass=SingletonType):
                 self.active_connections.remove(connection)
 
     @staticmethod
-    async def send_message(conn: Tuple[WebSocket, bool], message: Union[str, bytes, dict]):
+    async def send_message(conn: tuple[WebSocket, bool], message: Union[str, bytes, dict]):
         if isinstance(message, dict):
             message = json.dumps(message, cls=JsonEncoderEx)
         if conn[1]:  # send_bytes

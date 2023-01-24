@@ -1,6 +1,3 @@
-from typing import List
-
-
 class Asset:
     id: int = 0
     name: str = ''
@@ -16,4 +13,4 @@ class Release:
     name: str = ''
     published_at: str = ''
     body: str = ''
-    assets: List[Asset] = []
+    assets: list[Asset] = []
