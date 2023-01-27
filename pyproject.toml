@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "KenkoGoServer"
+version = "0.3.1"
+description = "A Controller of go-cqhttp"
+license = "MIT"
+authors = ["AkagiYui <akagiyui@yeah.net>"]
+maintainers = ["AkagiYui <akagiyui@yeah.net>"]
+readme = "README.md"
+homepage = "https://kenkogo.akagiyui.com"
+repository = "https://github.com/KenkoGoProject/KenkoGoServer/"
+documentation = "https://kenkogo.akagiyui.com/docs"
+keywords = ["kenkogo", "go-cqhttp"]
+packages = [{include = "kenkogo_server", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+rich = "^12.5.1"
+ruamel-yaml = "^0.17.21"
+uvicorn = "^0.18.2"
+fastapi = "^0.79.0"
+requests = "^2.28.1"
+websockets = "^10.3"
+python-multipart = "^0.0.5"
+psutil = "^5.9.1"
+distro = "^1.7.0"
+# qrcode = "^7.3.1"
+# pyzbar = "^0.1.9"
+Pillow = "^9.2.0"
+python-dotenv = "*"
+pydantic = "*"
+
+[tool.poetry.group.dev.dependencies]
+types-requests = "^2.28.11.8"
+isort = "^5.10.1"   # import sorting import排序
+flake8 = "^5.0.4"   # code style checking 代码风格检查
+flake8-docstrings = "^1.6.0"   # docstring style checking 文档字符串风格检查
+mypy = "^0.991"   # type checking 类型检查
+pip-tools = "^6.10.0"   # pip requirements management 依赖管理
+pre-commit = "^2.21.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
